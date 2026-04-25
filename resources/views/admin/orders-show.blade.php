@@ -6,11 +6,11 @@
     <link rel="stylesheet" href="/admin_resources/vendors/typicons.font/font/typicons.css">
     <link rel="stylesheet" href="/admin_resources/vendors/css/vendor.bundle.base.css">
     <link rel="stylesheet" href="/admin_resources/css/vertical-layout-light/style.css">
-    
+
 @endpush
 
 @push('scripts')
- 
+
 <script src="/admin_resources/vendors/js/vendor.bundle.base.js"></script>
 <script src="/admin_resources/js/off-canvas.js"></script>
 <script src="/admin_resources/js/hoverable-collapse.js"></script>
@@ -25,7 +25,7 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
- 
+
 <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 <link rel="stylesheet" href="/admin_resources/css/small-box.css">
 
@@ -58,7 +58,7 @@
 
 <div class="main-panel">
     <div class="content-wrapper">
- 
+
       @include('partials.message-bag')
 
       @include('partials.order-stats')
@@ -76,23 +76,29 @@
             <div class="card-header d-flex justify-content-between align-items-center">
                 <span>Order Details - #{{ $order->order_no }} </span>
 
-                @if ($order->status_online_pay == 'paid' || is_null($order->status_online_pay))
+                @if (
+                    $order->payment_method == 'Cash On Delivery' ||
+                    $order->status_online_pay == 'paid' ||
+                    is_null($order->status_online_pay)
+                )
                     @if ($order->status !== 'completed' && $order->status !== 'cancelled')
-                        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#updateModal">Update Order</button>
+                        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#updateModal">
+                            Update Order
+                        </button>
                     @endif
                 @endif
-            
-        
+
+
             </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-6">
-                        <table class="table table-bordered mt-2">    
+                        <table class="table table-bordered mt-2">
                             <tr>
                                 <th>Order No.</th>
                                 <td>#{{ $order->order_no }}</td>
-                            </tr>                               
-                 
+                            </tr>
+
                             <tr>
                                 <th>Total Paid</th>
                                 <td>{!! $site_settings->currency_symbol !!}{{ number_format($order->total_price + ($order->delivery_fee ?? 0), 2) }}</td>
@@ -103,17 +109,17 @@
                             </tr>
                             <tr>
                                 <th>Delivery Distance</th>
-                                <td> {{ $order->delivery_distance === null ? 'N/A' : $order->delivery_distance . ' miles' }}</td>                              
+                                <td> {{ $order->delivery_distance === null ? 'N/A' : $order->delivery_distance . ' miles' }}</td>
                             </tr>
                             <tr>
                                 <th>Price Per Mile</th>
-                                <td> {{ $order->price_per_mile === null ? 'N/A' : html_entity_decode($site_settings->currency_symbol) . number_format($order->price_per_mile,2) }}</td>                              
+                                <td> {{ $order->price_per_mile === null ? 'N/A' : html_entity_decode($site_settings->currency_symbol) . number_format($order->price_per_mile,2) }}</td>
                             </tr>
-                            
+
                         </table>
                     </div>
                     <div class="col-md-6">
-                        <table class="table table-bordered mt-2">     
+                        <table class="table table-bordered mt-2">
                             <tr>
                                 <th>Created At</th>
                                 <td>{{ $order->created_at->format('g:i A -  j M, Y') }}</td>
@@ -121,38 +127,36 @@
                             <tr>
                                 <th>Updated At</th>
                                 <td>{{ $order->updated_at->format('g:i A -  j M, Y') }}</td>
-                            </tr>                             
+                            </tr>
                             <tr>
                                 <th>Payment Method</th>
-                                <td>{{ $order->payment_method }}</td>
-                            </tr>              
+                                <td>{{ $order->payment_method }}
+                                    @if(is_null($order->status_online_pay) || $order->status_online_pay === 'unpaid')
+                                        <span class="badge badge-danger"><i class="fa fa-exclamation-circle"></i> unpaid</span>
+                                    @endif
+                                </td>
+                            </tr>
                             <tr>
                                 <th>Order Type</th>
                                 <td>{{ ucfirst($order->order_type) }}</td>
-                            </tr>                  
+                            </tr>
 
                             <tr>
                                 <th>Status</th>
                                 <td>
+                                    @switch($order->status)
+                                        @case('pending')
+                                            <span class="badge badge-danger"><i class="fa fa-exclamation-circle"></i> {{ ucfirst($order->status) }}</span>
+                                            @break
+                                        @case('completed')
+                                            <span class="badge badge-success"><i class="fa fa-check"></i> {{ ucfirst($order->status) }}</span>
+                                            @break
+                                        @default
+                                            <span class="badge badge-warning"><i class="fa fa-exclamation-circle"></i> {{ ucfirst($order->status) }}</span>
+                                    @endswitch
 
-
-                                    @if(!is_null($order->status_online_pay) && $order->status_online_pay === 'unpaid')
-                                    <span class="badge badge-danger"><i class="fa fa-exclamation-circle"></i> unpaid</span>
-                                    @else
-                                        @switch($order->status)
-                                            @case('pending')
-                                                <span class="badge badge-danger"><i class="fa fa-exclamation-circle"></i> {{ ucfirst($order->status) }}</span>
-                                                @break
-                                            @case('completed')
-                                                <span class="badge badge-success"><i class="fa fa-check"></i> {{ ucfirst($order->status) }}</span>
-                                                @break
-                                            @default
-                                                {{ ucfirst($order->status) }}
-                                        @endswitch
-                                    @endif
-                                                     
                                 </td>
-                                
+
                             </tr>
                         </table>
                     </div>
@@ -171,7 +175,7 @@
                             <input type="text" class="form-control" id="session_id" value="{{ $order->session_id }}" readonly>
                             <div class="input-group-append">
                                 <button id="copy_session_id" class="btn btn-sm btn-light" type="button">
-                                    <i class="fa fa-copy"></i> 
+                                    <i class="fa fa-copy"></i>
                                 </button>
                             </div>
                         </div>
@@ -180,9 +184,9 @@
 
 
             </div>
-            
+
         </div>
-   
+
 
 
         <div class="card mt-3">
@@ -218,15 +222,15 @@
                 {!! $order->additional_info   ? '<span class="badge badge-danger"><i class="fa fa-exclamation-circle"></i> Additional Info:</span>  ' . e($order->additional_info)    : '' !!}
             </div>
         </div>
-        
-   
 
 
 
-   
+
+
+
         <div class="row mt-4">
             <div class="col-lg-6 d-flex grid-margin stretch-card">
-         
+
                 <div class="card">
                     <div class="card-header">
                         <h5>User Information</h5>
@@ -259,11 +263,11 @@
                         </table>
                     </div>
                 </div>
-                
-        
+
+
             </div>
             <div class="col-lg-6 d-flex grid-margin stretch-card">
-              
+
                 <div class="card ">
                     <div class="card-header">
                         <h5>Customer Information</h5>
@@ -326,19 +330,19 @@
                             @endif
 
                         @endif
-                                                    
-                            
-                            
+
+
+
                     </div>
                 </div>
-                
-           
+
+
             </div>
           </div>
      <hr/>
 
      @if ($loggedInUser->role == "global_admin")
- 
+
         <!-- Delete Button to trigger modal -->
         <button type="button" class="btn-sm btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
             <i class="fa fa-trash"></i> Delete Order
@@ -428,4 +432,3 @@
 
 
 
- 

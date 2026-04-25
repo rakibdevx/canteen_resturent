@@ -9,7 +9,7 @@ trait OrderStatisticsTrait
     public function shareOrderStatistics()
     {
         $pending_orders_count = Order::where('status', 'pending')->count();
-        $online_orders_count = Order::where('order_type', 'online')->count();
+        $online_orders_count = Order::where('order_type', 'online')->orWhere('order_type', 'pickup')->count();
         $instore_orders_count = Order::where('order_type', 'instore')->count();
         $all_orders_count = Order::count();
 

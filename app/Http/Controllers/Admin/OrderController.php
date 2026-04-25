@@ -23,7 +23,7 @@ class OrderController extends Controller
     {
         $this->shareAdminViewData();
         $this->shareOrderStatistics();
-        
+
     }
 
 
@@ -40,7 +40,7 @@ class OrderController extends Controller
 
 
         if ($request->ajax()) {
- 
+
             $orders = Order::select(['id', 'order_no', 'created_at', 'total_price', 'status','status_online_pay', 'order_type'])->orderBy('id', 'desc');
 
 
@@ -61,16 +61,16 @@ class OrderController extends Controller
                         $viewButton = '<a href="'.route('admin.order.show', $order->id).'" class="btn btn-secondary btn-sm"><i class="fa fa-eye"></i></a>';
 
                         $deleteButton = Auth::user()->role == "global_admin"  ? '<button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" data-id="'.$order->id.'"><i class="fa fa-trash"></i></button>'   : '';
-                                            
+
                         return $viewButton . ' ' . $deleteButton;
                     })
                     ->editColumn('order_no', function ($order) {
                         return "#".$order->order_no;
-                    })                   
+                    })
                     ->editColumn('created_at', function ($order) {
                         return $order->created_at->format('g:i A -  j M, Y');
-                    })          
- 
+                    })
+
                     ->editColumn('total_price', function ($order) {
                         //Get Site Settings
                         $site_settings      =   SiteSetting::latest()->first();
@@ -80,7 +80,7 @@ class OrderController extends Controller
 
                     })
                     ->editColumn('status', function ($order) {
-                        
+
                         if (!is_null($order->status_online_pay) && $order->status_online_pay == 'unpaid') {
                             return '<span class="badge badge-danger"><i class="fa fa-exclamation-circle"></i> unpaid</span>';
                         } else {
@@ -90,30 +90,30 @@ class OrderController extends Controller
                                 case 'completed':
                                     return '<span class="badge badge-success"><i class="fa fa-check"></i> ' . ucfirst($order->status) . '</span>';
                                 default:
-                                    return ucfirst($order->status);
+                                    return '<span class="badge badge-warning"><i class="fa fa-exclamation-circle"></i> ' . ucfirst($order->status) . '</span>';
                             }
                         }
-                            
+
 
                     })
-                    
+
                     ->editColumn('order_type', function ($order) {
                         return ucfirst($order->order_type);
-                    })                   
+                    })
                     ->rawColumns(['action','status'])
                     ->make(true);
         }
-          
+
         return view('admin.orders-index', compact('filter'));
     }
-    
+
     public function show($id)
     {
         $order = Order::with(['orderItems', 'createdByUser', 'updatedByUser', 'customer', 'pickupAddress', 'deliveryAddressWithTrashed'])->findOrFail($id);
-        
+
         return view('admin.orders-show', compact('order'));
     }
-    
+
 
 
     public function createOrder(Request $request)
@@ -130,8 +130,8 @@ class OrderController extends Controller
 
         // Validate request data
         $validatedData = $request->validate([
-            'payment_method' => 'required|max:255',  
-            'additional_info' => 'nullable|string|max:255',           
+            'payment_method' => 'required|max:255',
+            'additional_info' => 'nullable|string|max:255',
         ]);
 
 
@@ -159,7 +159,7 @@ class OrderController extends Controller
             // Create order items using the relationship
             foreach ($cart as $item) {
                 $order->orderItems()->create([
-                    'menu_name' => $item['name'],  
+                    'menu_name' => $item['name'],
                     'quantity' => $item['quantity'],
                     'subtotal' => $item['price'] * $item['quantity'],
                 ]);
@@ -172,7 +172,7 @@ class OrderController extends Controller
         return redirect()->route('admin.orders.index')->with('success', 'Order Created successfully.');
     }
 
-    
+
     public function update(Request $request, $id)
     {
         // Validate the input data
@@ -181,12 +181,17 @@ class OrderController extends Controller
         ]);
         $order = Order::findOrFail($id);
 
-        $order->update(['status' => $request->status , 'updated_by_user_id' => Auth::id()]);
-    
+        $order->update(
+            [
+                'status' => $request->status ,
+                'status_online_pay' => 'paid' ,
+                'updated_by_user_id' => Auth::id()
+            ]);
+
         return back()->with('success', 'Order status updated successfully');
     }
 
- 
+
     public function destroy($id)
     {
         $order = Order::findOrFail($id);

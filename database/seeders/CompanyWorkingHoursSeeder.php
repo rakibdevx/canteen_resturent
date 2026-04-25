@@ -15,8 +15,8 @@ class CompanyWorkingHoursSeeder extends Seeder
             ['day' => 'Wednesday', 'open' => '09:00', 'close' => '17:00', 'closed' => false],
             ['day' => 'Thursday',  'open' => '09:00', 'close' => '17:00', 'closed' => false],
             ['day' => 'Friday',    'open' => '09:00', 'close' => '17:00', 'closed' => false],
-            ['day' => 'Saturday',  'open' => null,    'close' => null,    'closed' => true],
-            ['day' => 'Sunday',    'open' => null,    'close' => null,    'closed' => true],
+            ['day' => 'Saturday',  'open' => '08:00', 'close' => '17:00', 'closed' => false],
+            ['day' => 'Sunday',    'open' => '08:00', 'close' => '17:00', 'closed' => false],
         ];
 
         foreach ($days as $item) {

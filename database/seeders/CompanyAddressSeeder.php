@@ -11,25 +11,24 @@ class CompanyAddressSeeder extends Seeder
     {
         $addresses = [
             [
-                'street'       => '38 Schuster Rd',
-                'city'         => 'Manchester',
-                'state'        => 'England',
-                'postal_code'  => 'M14 5LX',
-                'country'      => 'United Kingdom',
-                'latitude'     => 53.448990,   // You can update these later
-                'longitude'    => -2.229520,
+                'street'       => 'House 12, Road 5, Dhanmondi',
+                'city'         => 'Dhaka',
+                'state'        => 'Dhaka',
+                'postal_code'  => '1205',
+                'country'      => 'Bangladesh',
+                'latitude'     => 23.746466,
+                'longitude'    => 90.376015,
             ],
             [
-                'street'       => '63 Bradshawgate',
-                'city'         => 'Bolton',
-                'state'        => 'England',
-                'postal_code'  => 'BL1 1QD',
-                'country'      => 'United Kingdom',
-                'latitude'     => 53.577049,  // You can update these later
-                'longitude'    => -2.429560,
+                'street'       => 'House 45, Road 10, Uttara Sector 7',
+                'city'         => 'Dhaka',
+                'state'        => 'Dhaka',
+                'postal_code'  => '1230',
+                'country'      => 'Bangladesh',
+                'latitude'     => 23.875900,
+                'longitude'    => 90.379500,
             ]
         ];
-
         foreach ($addresses as $address) {
             CompanyAddress::updateOrCreate(
                 [

@@ -1,156 +1,59 @@
-# Laravel Restaurant Website
+<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-## Overview
-This project is a **Restaurant Management System** built using Laravel. It provides functionality for administrators to manage restaurant operations efficiently, including categories, menus, contact information, and orders. For users, the website serves as an online platform to explore the restaurant menu and place food orders, making it easy to enjoy the restaurant's offerings from anywhere.
+<p align="center">
+<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+</p>
 
----
+## About Laravel
 
-## Features
-- **Category Management**: Admins can create, update, and delete categories for organizing the menu.
-- **Menu Management**: Add, edit, and delete menu items with details like pricing, description, and categories.
-- **Contact Management**: Manage the restaurant's contact information, including phone numbers, addresses, working hours, and social media handles.
-- **Order Management**: View and process customer orders efficiently.
-- **Explore Menu**: Customers can browse the restaurant's menu, filter by categories, and view detailed information about each item.
-- **Online Food Ordering**: Users can add menu items to their cart, place orders online, and receive confirmation for their orders.
-- **Responsive Design**: The website is fully responsive, ensuring it works seamlessly on all devices.
-- **Dynamic Content**: Admins can update information like working hours, addresses, and phone numbers dynamically.
+Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
----
+- [Simple, fast routing engine](https://laravel.com/docs/routing).
+- [Powerful dependency injection container](https://laravel.com/docs/container).
+- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
+- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
+- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
+- [Robust background job processing](https://laravel.com/docs/queues).
+- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-## Demo
-Check out the live demo of the project: [Restaurant Management System Demo](https://restaurant.chrys-online.com/)
+Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-![Screenshot](documentation/demo-main-site.png)
-![Screenshot](documentation/demo-admin-dashboard.png)
+## Learning Laravel
 
----
+Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
 
-## Security
-Best practices are being employed in this project according to the latest Laravel 11 documentation. This includes proper data encryption and two-factor authentication to ensure the security and privacy of user data.
+If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
----
+## Laravel Sponsors
 
-## Tools & Technologies Used
-- **Laravel Framework**: PHP framework for building robust web applications.
-- **MySQL**: Database for storing restaurant data (menus, orders, contact info, etc.).
-- **AdminLTE 3**: For the admin dashboard interface ([AdminLTE 3 Dashboard](https://adminlte.io/themes/v3/)).
-- **HTML5 & CSS3**: For building the front-end structure and design.
-- **JavaScript & jQuery**: For interactive elements and dynamic behavior.
-- **Bootstrap**: For responsive design and layout.
-- **Templatemagic**: Portfolio template ([Portfolio by Templatemagic](https://themeforest.net/user/templatemagic/portfolio)).
+We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
 
----
+### Premium Partners
 
-## Libraries Used
-This project utilizes the following libraries for enhanced functionality:  
+- **[Vehikl](https://vehikl.com)**
+- **[Tighten Co.](https://tighten.co)**
+- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
+- **[64 Robots](https://64robots.com)**
+- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
+- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
+- **[Redberry](https://redberry.international/laravel-development)**
+- **[Active Logic](https://activelogic.com)**
 
-- **[ezyang/htmlpurifier (4.18.0)](https://github.com/ezyang/htmlpurifier)**: Standards-compliant HTML filter written in PHP to ensure clean and secure HTML content.  
-- **[intervention/image-laravel (1.3.0)](https://github.com/Intervention/image)**: Laravel integration of Intervention Image for image manipulation.  
-- **[yajra/laravel-datatables-oracle (11.1.5)](https://yajrabox.com/docs/laravel-datatables/master)**: jQuery DataTables API for Laravel, simplifying server-side processing.  
-- **[stripe/stripe-php (16.4.0)](https://github.com/stripe/stripe-php)**: Stripe PHP library for payment processing and integration.  
- 
-  
+## Contributing
 
---- 
-## How to Deploy On Shared Host Cpanel
+Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
 
-[Deploy On Shared Host Cpanel ](DEPLOY.md)
+## Code of Conduct
 
-## How to Run This Project on Your Local Machine
-Follow these steps to set up and run the project locally:
+In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
 
-### **Step 1: Clone the Repository**
-```bash
-git clone https://github.com/chrysanthusobinna/laravel-restaurant.git
-cd laravel-restaurant
-```
+## Security Vulnerabilities
 
-### **Step 2: Set Up the Environment**
-1. Rename `.env.example` to `.env`:
-   ```bash
-   mv .env.example .env
-   ```
- 
-### 2. Configure Your `.env` File  
-Set up your `.env` file with the following configurations:  
+If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
-#### **Database Connection**  
-Define the database connection settings:  
-```plaintext  
-DB_CONNECTION=sqlite  
-# DB_HOST=  
-# DB_PORT=  
-# DB_DATABASE=  
-# DB_USERNAME=  
-# DB_PASSWORD=  
-```  
+## License
 
-#### **Mail Configuration**  
-Set up mail configurations:  
-```plaintext  
-MAIL_MAILER=log  
-MAIL_HOST=1  
-MAIL_PORT=  
-MAIL_USERNAME=  
-MAIL_PASSWORD=  
-MAIL_ENCRYPTION=  
-MAIL_FROM_ADDRESS=  
-```  
-
-#### **Stripe Configuration**  
-Get your Stripe secret key and webhook secret from [Stripe](https://stripe.com/):  
-```plaintext  
-STRIPE_SECRET=sk_xxxxxxxxxxxxxx
-STRIPE_WEBHOOK_SECRET=whsec_xxxxxxxxxxxxxxxxxxxxxxxx
-```  
-
-#### **Google Maps API Key**  
-Get your Google Maps API key from the [Google Cloud Console](https://console.cloud.google.com/):  
-```plaintext  
-GOOGLE_MAPS_API_KEY=AIzaSyCDC0tAy9sV41Wwa9Ou-Kch95GJIQ51JKw  
-```  
-
-#### **Company Address**  
-Set the company address here. Note that the address saved in the database will take precedence, and this will only serve as a fallback:  
-```plaintext  
-ADDRESS="Bradshawgate Bolton, BL1 1QD"  
-```  
-
--- 
-
-### **Step 3: Set Up the Database**
-1. Create a new MySQL database (e.g., `restaurant_db`).
-2. Run migrations and seeders:
-   ```bash
-   php artisan migrate
-   ```
-
-### **Step 4: Start the Application**
-Run the application on port 8000 or any port of your choice:
-```bash
-php artisan serve --port=8000
-```
-Visit the application at `http://127.0.0.1:8000`.
-
-### **Step 5: Create an Admin User**
-To create an admin user with global rights:
-1. Edit the `UserSeeder` file located at `database/seeders/UserSeeder.php` and set the user details as desired.
-2. Run the following command to seed the user:
-   ```bash
-   php artisan db:seed --class=UserSeeder
-   ```
-This user account will have global rights and can be used to create other user accounts.
-
----
-
-## Credits
-- **[BootstrapDash](https://github.com/BootstrapDash/celestialAdmin-free-admin-template)**: The admin dashboard celestialAdmin admin template
- design is powered by BootstrapDash, offering a modern and customizable interface.
-- **[Templatemagic Portfolio](https://themeforest.net/user/templatemagic/portfolio)**: The front-end template for the website is inspired by Templatemagic's portfolio designs.
-
----
-
-Feel free to fork this repository or contribute to its development by submitting a pull request! 
-
----
- 
+The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

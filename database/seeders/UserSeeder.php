@@ -16,17 +16,17 @@ class UserSeeder extends Seeder
     public function run()
     {
         DB::table('users')->insert([
-            'first_name' => 'chrysanthus',
-            'middle_name' => 'O',
-            'last_name' => 'Chiagwah',
-            'email' => 'user@gmail.com',
+            'first_name' => 'Rakibul',
+            'middle_name' => '',
+            'last_name' => 'Islam',
+            'email' => 'admin@example.com',
             'password' => Hash::make('password'), // Hashed password
             'role' => 'global_admin',
             'status' => 1,
-            'phone_number' => '+446545748844',
-            'address' => '123 Main Street, Springfield',
-            'profile_picture' => null, // Default null if no picture
-            'activation_token' => null, // Default null if no activation token
+            'phone_number' => '01111111111',
+            'address' => 'Airport,DHaka,Bangladesh',
+            'profile_picture' => null,
+            'activation_token' => null,
             'remember_token' => null,
             'two_factor_auth' => 0,
             'email_verified_at' => now(),
