@@ -23,7 +23,7 @@ class Order extends Model
         'additional_info',
         'delivery_fee',
         'delivery_distance',
-        'price_per_mile',
+        'price_per_floor',
         'delivery_address_id',
         'pickup_address_id',
     ];
@@ -46,7 +46,7 @@ class Order extends Model
         return $this->belongsTo(Address::class, 'delivery_address_id')->withTrashed();
     }
 
- 
+
     // Pickup address
     public function pickupAddress()
     {

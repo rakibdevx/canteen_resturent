@@ -3,16 +3,16 @@
 @extends('layouts.main-site')
 
 @push('styles')
-    
-    
+
+
     <!-- Animation CSS -->
-    <link rel="stylesheet" href="/assets/css/animate.css">	
+    <link rel="stylesheet" href="/assets/css/animate.css">
     <!-- Latest Bootstrap min CSS -->
     <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
     <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css?family=Kaushan+Script&amp;display=swap" rel="stylesheet"> 
-    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans:100,100i,300,300i,400,400i,600,600i,700,700i&amp;display=swap" rel="stylesheet"> 
-    <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i&amp;display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css?family=Kaushan+Script&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans:100,100i,300,300i,400,400i,600,600i,700,700i&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i&amp;display=swap" rel="stylesheet">
     <!-- Icon Font CSS -->
     <link rel="stylesheet" href="/assets/css/all.min.css">
     <link rel="stylesheet" href="/assets/css/ionicons.min.css">
@@ -37,32 +37,32 @@
     <link rel="stylesheet" href="/assets/css/responsive.css">
     <link id="layoutstyle" rel="stylesheet" href="/assets/color/theme-red.css">
 
-    
+
     <!-- FancyBox CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox/dist/jquery.fancybox.min.css">
 @endpush
 
 
 @push('scripts')
-    <!-- Latest jQuery --> 
-    <script src="/assets/js/jquery-1.12.4.min.js"></script> 
-    <!-- Latest compiled and minified Bootstrap --> 
-    <script src="/assets/bootstrap/js/bootstrap.min.js"></script> 
-    <!-- owl-carousel min js  --> 
-    <script src="/assets/owlcarousel/js/owl.carousel.min.js"></script> 
-    <!-- magnific-popup min js  --> 
-    <script src="/assets/js/magnific-popup.min.js"></script> 
-    <!-- waypoints min js  --> 
-    <script src="/assets/js/waypoints.min.js"></script> 
-    <!-- parallax js  --> 
-    <script src="/assets/js/parallax.js"></script> 
-    <!-- countdown js  --> 
-    <script src="/assets/js/jquery.countdown.min.js"></script> 
+    <!-- Latest jQuery -->
+    <script src="/assets/js/jquery-1.12.4.min.js"></script>
+    <!-- Latest compiled and minified Bootstrap -->
+    <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
+    <!-- owl-carousel min js  -->
+    <script src="/assets/owlcarousel/js/owl.carousel.min.js"></script>
+    <!-- magnific-popup min js  -->
+    <script src="/assets/js/magnific-popup.min.js"></script>
+    <!-- waypoints min js  -->
+    <script src="/assets/js/waypoints.min.js"></script>
+    <!-- parallax js  -->
+    <script src="/assets/js/parallax.js"></script>
+    <!-- countdown js  -->
+    <script src="/assets/js/jquery.countdown.min.js"></script>
     <!-- jquery.countTo js  -->
     <script src="/assets/js/jquery.countTo.js"></script>
-    <!-- imagesloaded js --> 
+    <!-- imagesloaded js -->
     <script src="/assets/js/imagesloaded.pkgd.min.js"></script>
-    <!-- isotope min js --> 
+    <!-- isotope min js -->
     <script src="/assets/js/isotope.min.js"></script>
     <!-- jquery.appear js  -->
     <script src="/assets/js/jquery.appear.js"></script>
@@ -74,13 +74,13 @@
     <script src="/assets/js/datepicker.min.js"></script>
     <!-- TimePicker js -->
     <script src="/assets/js/mdtimepicker.min.js"></script>
-    <!-- scripts js --> 
+    <!-- scripts js -->
     <script src="/assets/js/scripts.js"></script>
 
      <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox/dist/jquery.fancybox.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
+
 
 
 @if(session('success') || session('error'))
@@ -88,11 +88,11 @@
     $(document).ready(function() {
         $.fancybox.open({
             src: '<div class="row" style="width:350px; position: relative;">' +
-                    @if(session('success')) 
+                    @if(session('success'))
                         '<div class="alert alert-success" role="alert">' +
                             '<i class="fa fa-check-circle" style="font-size: 20px;"></i> {{ session('success') }}' +
                         '</div>' +
-                    @elseif(session('error')) 
+                    @elseif(session('error'))
                         '<div class="alert alert-danger" role="alert">' +
                             '<i class="fa fa-exclamation-circle" style="font-size: 20px;"></i> {{ session('error') }}' +
                         '</div>' +
@@ -108,8 +108,8 @@
                 height: 'auto',
                 maxWidth: 500,
                 maxHeight: 'auto',
-                modal: false,  
-                clickOutside: true,  
+                modal: false,
+                clickOutside: true,
                 afterShow: function(instance, current) {
                     $('.btn-close').on('click', function() {
                         $.fancybox.close();
@@ -157,8 +157,8 @@
                         <div class="row">
                             <div class="col-lg-7 col-md-12 col-sm-12">
                                 <div class="banner_content2 text_white">
-                                    <h2 class="staggered-animation" data-animation="fadeInUp" data-animation-delay="0.2s">Tasty African Delights</h2>
-                                    <p class="staggered-animation" data-animation="fadeInUp" data-animation-delay="0.4s">Experience the vibrant flavors of Africa with dishes crafted to perfection. <br class="d-none d-md-block" /> Each bite takes you closer to tradition and joy.</p>
+                                    <h2 class="staggered-animation" data-animation="fadeInUp" data-animation-delay="0.2s">Canteen Special Delights</h2>
+                                    <p class="staggered-animation" data-animation="fadeInUp" data-animation-delay="0.4s">Experience the vibrant flavors of our campus canteen with dishes crafted to perfection.<br class="d-none d-md-block" />Each bite brings you closer to comfort, freshness, and joy.</p>
                                     <a class="btn btn-default rounded-0 staggered-animation" href="{{ route('menu') }}" data-animation="fadeInUp" data-animation-delay="0.6s">Order Online</a>
                                 </div>
                             </div>
@@ -172,8 +172,8 @@
                         <div class="row justify-content-center">
                             <div class="col-lg-7 col-md-12 col-sm-12 text-center">
                                 <div class="banner_content2 text_white">
-                                    <h2 class="staggered-animation" data-animation="fadeInUp" data-animation-delay="0.2s">Choose & Savor</h2>
-                                    <p class="staggered-animation" data-animation="fadeInUp" data-animation-delay="0.4s">Indulge in suya and other mouthwatering dishes, infused with authentic spices <br class="d-none d-md-block" /> and crafted to delight your taste buds.</p>
+                                    <h2 class="staggered-animation" data-animation="fadeInUp" data-animation-delay="0.2s">Choose & Enjoy</h2>
+                                    <p class="staggered-animation" data-animation="fadeInUp" data-animation-delay="0.4s">Indulge in a variety of mouthwatering dishes, infused with rich spices<br class="d-none d-md-block" />and crafted to delight your taste buds with every bite.</p>
                                     <a class="btn btn-default rounded-0 staggered-animation" href="{{ route('menu') }}" data-animation="fadeInUp" data-animation-delay="0.6s">Order Online</a>
                                     <a class="btn btn-white rounded-0 staggered-animation" href="{{ route('contact') }}" data-animation="fadeInUp" data-animation-delay="0.6s">Contact Us</a>
                                 </div>
@@ -190,7 +190,7 @@
                                 <div class="banner_content2 text_white">
                                     <h4 class="staggered-animation text_default" data-animation="fadeInUp" data-animation-delay="0.2s">Are You Ready</h4>
                                     <h2 class="staggered-animation" data-animation="fadeInUp" data-animation-delay="0.2s">Enjoy Every Bite</h2>
-                                    <p class="staggered-animation" data-animation="fadeInUp" data-animation-delay="0.4s">From sizzling suya to hearty stews, enjoy African dishes made to bring joy <br class="d-none d-md-block" /> to every occasion and appetite.</p>
+                                    <p class="staggered-animation" data-animation="fadeInUp" data-animation-delay="0.4s">Enjoy a variety of freshly prepared meals, from light snacks to hearty dishes.<br class="d-none d-md-block" />Crafted to satisfy your cravings and brighten every moment.</p>
                                     <a class="btn btn-default rounded-0 staggered-animation" href="{{ route('menu') }}" data-animation="fadeInUp" data-animation-delay="0.6s">Order Online</a>
                                     <a class="btn btn-white rounded-0 staggered-animation" href="{{ route('contact') }}" data-animation="fadeInUp" data-animation-delay="0.6s">Contact Us</a>
                                 </div>
@@ -206,8 +206,8 @@
 </div>
 <!-- END SECTION BANNER -->
 
- 
- 
+
+
 
     <!-- START SECTION OUR MENU -->
     <div class="section pb_70">
@@ -223,11 +223,11 @@
             </div>
             <div class="row">
                 <div class="col-12">
-  
+
                     <div class="row">
 
-   
-                        @forelse ($menus as $menu) 
+
+                        @forelse ($menus as $menu)
 
 
                         <div class="d-flex col-lg-3 col-sm-6">
@@ -242,15 +242,15 @@
                                         <h5><a href="{{ route('menu.item',$menu->id) }}"> {{ $menu->name }}</a></h5>
                                     </div>
                                     <p>{!! $site_settings->currency_symbol !!}{{ number_format($menu->price, 2) }}</p>
-                                </div>                    
+                                </div>
                             </div>
                         </div>
-                        
+
                         @empty
                         <b> No Menu available. </b>
-                        @endforelse                       
+                        @endforelse
 
-    
+
 
                     </div>
 
@@ -360,7 +360,7 @@
                                                 </div>
                                             </div>
                                         </form>
-                                        
+
                                     </div>
                                     <div class="medium_divider clearfix"></div>
                                 </div>
@@ -434,7 +434,7 @@
         <div class="row justify-content-center">
 
 
-           
+
                 @forelse($blogs as $blog)
                     <div class="d-flex col-lg-4 col-md-6 animation" data-animation="fadeInUp" data-animation-delay="0.2s">
                         <div class="blog_post blog_style2 box_shadow1">
@@ -448,7 +448,7 @@
                             </div>
                             <div class="blog_content">
                                 <div class="blog_text">
-                             
+
                                     <h5 class="blog_title"><a href="#">{{ $blog->name }}</a></h5>
                                     <p>{{ Str::limit(strip_tags($blog->content), 50) }}</p>
 
@@ -459,9 +459,9 @@
                 @empty
                     <p>No blogs found.</p>
                 @endforelse
-          
-            
-            
+
+
+
         </div>
     </div>
 </div>
@@ -469,8 +469,7 @@
 
 @endif
 
- 
+
 @endsection
 
 
- 

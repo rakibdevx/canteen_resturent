@@ -11,11 +11,11 @@
 
     <link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
 
-    
+
 @endpush
 
 @push('scripts')
- 
+
 <script src="/admin_resources/vendors/js/vendor.bundle.base.js"></script>
 <script src="/admin_resources/js/off-canvas.js"></script>
 <script src="/admin_resources/js/hoverable-collapse.js"></script>
@@ -26,10 +26,10 @@
 <script src="/admin_resources/vendors/progressbar.js/progressbar.min.js"></script>
 <script src="/admin_resources/vendors/chart.js/Chart.min.js"></script>
 <!-- Custom js for this page-->
- 
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
- 
+
 <!-- DataTables JS  -->
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 
@@ -37,20 +37,20 @@
     $(document).ready(function() {
         // Initialize DataTable for the menu table
         $('#menu-table').DataTable({
-            "paging": true,        
-            "searching": true,      
-            "ordering": false,      
-            "info": false,          
-            "lengthChange": false, 
-            "processing": true,     
-            "bPaginate": true,      
-            "bSort": false,         
-     
+            "paging": true,
+            "searching": true,
+            "ordering": false,
+            "info": false,
+            "lengthChange": false,
+            "processing": true,
+            "bPaginate": true,
+            "bSort": false,
+
         });
     });
 </script>
 
-<script>  
+<script>
 
 $(document).ready(function () {
     // Function to add item to cart
@@ -58,7 +58,7 @@ $(document).ready(function () {
         $.post('{{ route('admin.cart.add') }}', {  _token: "{{ csrf_token() }}", cartkey: 'admin', id: id, name: name, price: price }, function (data) {
             if (data.success) {
                 updateCartUI(data.cart);
- 
+
             }
         });
     }
@@ -98,23 +98,23 @@ $(document).ready(function () {
                     <td><input type="number" value="${item.quantity}" min="1" data-id="${item.id}" class="quantity-input" style="width: 4.5em;"></td>
                     <td>{!! $site_settings->currency_symbol !!}${subtotal.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
                     <td><button class="btn btn-danger btn-sm remove-btn" data-id="${item.id}"> <i class="fa fa-times" aria-hidden="true"></i></button></td>
-                </tr> 
+                </tr>
 
             `);
         });
 
         if(total > 0){
-            $('#clear-cart').show();  
+            $('#clear-cart').show();
             if ($('#payment_method').val() !== "") { $('#checkout-btn').show();  } else { $('#checkout-btn').hide();  }
         } else {
-          $('#clear-cart').hide();  
-          $('#checkout-btn').hide();         
+          $('#clear-cart').hide();
+          $('#checkout-btn').hide();
         }
 
         // Display the total
         $('#cart-total').text('Total: {!! html_entity_decode($site_settings->currency_symbol) !!}' + total.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ","));
         $('#total').val(total.toFixed(2))
-        
+
         // listener to remove buttons
         $('.remove-btn').click(function () {
             var id = $(this).data('id');
@@ -155,14 +155,14 @@ $(document).ready(function () {
     });
 });
 
- 
- 
+
+
 
 $('#payment_method').on('change', function() {
     if ($(this).val() !== "" && $('#total').val() > 0) {
-        $('#checkout-btn').show();   
+        $('#checkout-btn').show();
     } else {
-        $('#checkout-btn').hide();   
+        $('#checkout-btn').hide();
     }
 });
 
@@ -177,7 +177,7 @@ $('#payment_method').on('change', function() {
     });
 
 </script>
- 
+
 @endpush
 
 
@@ -190,9 +190,9 @@ $('#payment_method').on('change', function() {
 
 <div class="main-panel">
     <div class="content-wrapper">
- 
+
       @include('partials.message-bag')
- 
+
 
       <div class="row">
         <div class="col-lg-6 d-flex grid-margin stretch-card">
@@ -219,7 +219,7 @@ $('#payment_method').on('change', function() {
                             </td>
                             <td>{!! $site_settings->currency_symbol !!}{{ $menu->price }}</td>
                             <td>
-     
+
                                 <button class="m-1 btn btn-secondary btn-sm add-to-cart"
                                 data-id="{{ $menu->id }}"
                                 data-name="{{ $menu->name }}"
@@ -245,7 +245,7 @@ $('#payment_method').on('change', function() {
               <div style="" class="d-flex flex-wrap justify-content-between">
                 <h4 class="card-title mb-3">Cart</h4>
               </div>
- 
+
 
               <div style="overflow-x: auto;">
               <table class="table" >
@@ -268,7 +268,7 @@ $('#payment_method').on('change', function() {
             <div id="cart-total" class="mt-3"></div>
             <hr/>
 
- 
+
 
 
             </div>
@@ -288,10 +288,10 @@ $('#payment_method').on('change', function() {
             <input type="hidden"   id="total" value="0">
             <input type="hidden"   name="cartkey" value="admin">
             @csrf
- 
+
 
               <hr>
-              <table class="table table-bordered"> 
+              <table class="table table-bordered">
                 <tbody>
                     <tr>
                         <td><strong>Additional Info</strong></td>
@@ -306,12 +306,13 @@ $('#payment_method').on('change', function() {
                                 <option value="">Select a payment method</option>
                                 <option>Credit / Debit Card</option>
                                 <option>Bank Transfer</option>
+                                <option>Cash</option>
                             </select>
                         </td>
                     </tr>
                 </tbody>
             </table>
-            
+
 
 
             </form>
@@ -321,11 +322,11 @@ $('#payment_method').on('change', function() {
             <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ route('admin.dashboard') }}'">Cancel</button>
 
         </div>
-    </div>     
+    </div>
     @endif
 
-    
- 
+
+
 
 
 
@@ -362,4 +363,3 @@ $('#payment_method').on('change', function() {
 
 
 
- 

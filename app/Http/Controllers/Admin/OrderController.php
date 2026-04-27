@@ -146,7 +146,7 @@ class OrderController extends Controller
             'created_by_user_id' => Auth::id(),
             'updated_by_user_id' => Auth::id(),
             'total_price' => $totalPrice,
-            'status' => 'completed',
+            'status' => 'pending',
             'payment_method' => $validatedData['payment_method'],
             'additional_info' => $validatedData['additional_info'],
             'delivery_fee' => null,

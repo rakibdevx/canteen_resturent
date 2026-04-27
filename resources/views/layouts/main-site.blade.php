@@ -17,7 +17,7 @@
 
 @stack('styles')
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
- 
+
 </head>
 
 <body>
@@ -35,13 +35,13 @@
         </div>
     </div>
 </div>
-<!-- END LOADER --> 
+<!-- END LOADER -->
  @yield('header')
 
  @include('partials.account')
 
  @yield('content')
- 
+
  @include('partials.logout')
 
  @include('partials.footer')
@@ -49,11 +49,6 @@
 
 
 @stack('scripts')
-
-@if($liveChatScript && $liveChatScript->script_code)
-    {!! $liveChatScript->script_code !!}
-@endif
-
 
 </body>
 </html>

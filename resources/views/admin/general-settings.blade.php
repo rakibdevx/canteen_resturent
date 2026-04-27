@@ -10,7 +10,7 @@
     <style>
 
         /* Make Google Places suggestions appear above Bootstrap modals */
- 
+
 .pac-container {
     z-index: 20000 !important;
     background-color: #fff;
@@ -19,11 +19,11 @@
 
 
     </style>
-    
+
 @endpush
 
 @push('scripts')
- 
+
 <script src="/admin_resources/vendors/js/vendor.bundle.base.js"></script>
 <script src="/admin_resources/js/off-canvas.js"></script>
 <script src="/admin_resources/js/hoverable-collapse.js"></script>
@@ -179,7 +179,7 @@
             $('#socialMediaForm').attr('action', actionUrl);
             $('#socialMediaFormMethod').val('PUT');
             $('#socialMediaModalLabel').text('Edit Social Media Handle');
-        };      
+        };
 
         // Phone Number Delete
         window.deletePhoneNumber = function (id) {
@@ -213,77 +213,8 @@
 
 
 
-<script>
- 
-    function initAddressModalPlaces() {
-        var input = document.getElementById('address');
-        if (!input || !window.google || !google.maps || !google.maps.places) {
-            return;
-        }
-
-         input.addEventListener('keydown', function (e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-            }
-        });
-
-        var autocomplete = new google.maps.places.Autocomplete(input, {
-            types: ['geocode'],
-            fields: ['address_components', 'geometry', 'formatted_address']
-        });
-
-        autocomplete.addListener('place_changed', function () {
-            var place = autocomplete.getPlace();
-            if (!place || !place.address_components) {
-                return;
-            }
-
-            var components = place.address_components;
-
-            // Helper to pull a component by its type
-            function findComponent(type) {
-                var comp = components.find(function (c) {
-                    return c.types.indexOf(type) !== -1;
-                });
-                return comp ? comp.long_name : '';
-            }
-
-            var streetNumber = findComponent('street_number');
-            var route        = findComponent('route');
-            var line1        = [streetNumber, route].filter(Boolean).join(' ');
-
-             document.getElementById('line1').value        = line1;
-             document.getElementById('city').value         = findComponent('locality')
-                                                          || findComponent('postal_town')
-                                                          || findComponent('sublocality')
-                                                          || '';
-            document.getElementById('state').value        = findComponent('administrative_area_level_1');
-            document.getElementById('postal_code').value  = findComponent('postal_code');
-            document.getElementById('country').value      = findComponent('country');
-
-            if (place.geometry && place.geometry.location) {
-                document.getElementById('latitude').value  = place.geometry.location.lat();
-                document.getElementById('longitude').value = place.geometry.location.lng();
-            }
-        });
-    }
-
-     document.addEventListener('DOMContentLoaded', function () {
-        var modalEl = document.getElementById('addressModal');
-        if (!modalEl) return;
-
-        modalEl.addEventListener('shown.bs.modal', function () {
-             if (window.google && google.maps && google.maps.places) {
-                initAddressModalPlaces();
-            }
-        });
-    });
-</script>
 
 
-
-
-<script src="https://maps.googleapis.com/maps/api/js?key={{  config('services.google_maps.api_key') }}&libraries=places&callback=initCheckoutDeliveryLookups" async defer></script>
 
 <script>
     (function() {
@@ -326,13 +257,13 @@
 
 <div class="main-panel">
     <div class="content-wrapper">
- 
+
       @include('partials.message-bag')
 
- 
+
       <hr/>
       <h1>General Settings</h1>
-      
+
 
 
 
@@ -359,7 +290,7 @@
                             @forelse($phoneNumbers as $phoneNumber)
                                 <tr>
                                     <td>
-                                        <i class="fa fa-phone" aria-hidden="true"></i> 
+                                        <i class="fa fa-phone" aria-hidden="true"></i>
                                         {{ $phoneNumber->phone_number }}
                                         @if($phoneNumber->use_whatsapp == 1)
                                             <span class="badge bg-success"><i class="fab fa-whatsapp"></i></span>
@@ -381,11 +312,11 @@
                             @endforelse
                         </tbody>
                     </table>
-                    
+
                 </div>
             </div>
         </div>
-    
+
         <div class="col-md-6 grid-margin stretch-card">
             <!-- Addresses -->
             <div class="card mb-4">
@@ -407,7 +338,7 @@
                         @forelse($addresses as $address)
                             <tr>
                                 <td>
-                                    <i class="fa fa-map-marker" aria-hidden="true"></i> 
+                                    <i class="fa fa-map-marker" aria-hidden="true"></i>
                                     {{ $address->full_address }}
                                 </td>
                                 <td class="text-end">
@@ -449,12 +380,12 @@
 
                         </tbody>
                     </table>
-                    
+
                 </div>
             </div>
         </div>
     </div>
-    
+
     <div class="row">
         <div class="col-md-6 grid-margin stretch-card">
             <!-- Social Media Handles -->
@@ -483,11 +414,11 @@
                                         @elseif($handle->social_media === 'instagram')
                                             <i class="fab fa-instagram"></i>
                                         @elseif($handle->social_media === 'youtube')
-                                            <i class="fab fa-youtube-square"></i>         
+                                            <i class="fab fa-youtube-square"></i>
                                         @elseif($handle->social_media === 'tiktok')
-                                            <i class="fab fa-tiktok"></i>                                        
+                                            <i class="fab fa-tiktok"></i>
                                         @else
-                                            <i class="fa fa-globe"></i> 
+                                            <i class="fa fa-globe"></i>
                                         @endif
                                         {{ $handle->handle }}</td>
                                     <td>{{ ucfirst($handle->social_media) }}</td>
@@ -508,7 +439,7 @@
                 </div>
             </div>
         </div>
-    
+
         <div class="col-md-6 grid-margin stretch-card">
             <!-- Working Hours -->
             <div class="card mb-4">
@@ -593,51 +524,11 @@
 
 
 
-    
+
     <div class="row">
+
         <div class="col-lg-6 d-flex grid-margin stretch-card">
-            <form method="POST" action="{{ $script ? route('admin.livechat.update', $script->id) : route('admin.livechat.store') }}">
-                <div class="card">
-                    <div class="card-header">
-                        <span>{{ $script ? 'Edit Live Chat Script' : 'Add Live Chat Script' }}</span>
-                    </div>
-                    <div class="card-body">
-                        @csrf
-                        @if($script)
-                            @method('PUT')
-                        @endif
-                        <div class="alert alert-danger" role="alert">
-                            <i class="fa fa-exclamation-triangle"></i> <b>Please ensure you enter a valid live chat script code. Make sure the code is copied from a reliable third-party live chat provider.</b>
-                        </div>
-                        <hr/>
-                        <div class="form-group">
-                            <label for="name">Live Chat Name</label>
-                            <input type="text" class="form-control" id="name" name="name" placeholder="e.g., Tawk.to" value="{{ $script->name ?? '' }}" required>
-                        </div>
-                        <div class="form-group mt-3">
-                            <label for="script_code">Script Code</label>
-                            <textarea class="form-control" id="script_code" name="script_code" rows="2" placeholder="Paste the script code here..." required>{{ $script->script_code ?? '' }}</textarea>
-                        </div>
-                    </div>
-                    <div class="card-footer d-flex justify-content-between mt-4">
-                        @if($script)
-                            <button type="submit" class="btn btn-primary">Update</button>
-                            <button type="button" class="btn btn-danger" onclick="if(confirm('Are you sure you want to delete this script?')) { document.getElementById('form-delete-livechat').submit(); }">Remove Live Chat</button>
-                        @else
-                            <button type="submit" class="btn btn-primary">Add Live Chat</button>
-                        @endif
-                    </div>
-                </div>
-            </form>
-    @if($script)
-        <form method="POST" id="form-delete-livechat" action="{{ route('admin.livechat.destroy', $script->id) }}">
-            @csrf
-            @method('DELETE')
-        </form>
-    @endif
-        </div>
-        <div class="col-lg-6 d-flex grid-margin stretch-card">
- 
+
         <div class="card">
             <div class="card-header">
                 Other Settings
@@ -712,35 +603,38 @@
             </form>
         </div>
 
-        
-   
+
+
         </div>
-      </div>
 
-    
 
-      <div class="card mb-4">
+
+    <div class="col-lg-6 d-flex grid-margin stretch-card">
+          <div class="card mb-4">
         <div class="card-header d-flex justify-content-between align-items-center">
             <span>Customer Order Settings</span>
         </div>
         <div class="card-body">
             <form action="{{ route('admin.order-settings.update') }}" method="POST">
                 @csrf
-    
+
                 <div class="form-group">
-                    <label for="price_per_mile">Price per Mile ({!! $site_settings->currency_symbol !!})</label>
-                    <input type="number" name="price_per_mile" id="price_per_mile" class="form-control" value="{{ $order_settings->price_per_mile ?? '' }}" step="0.01" required>
+                    <label for="price_per_floor">Price per Floor ({!! $site_settings->currency_symbol !!})</label>
+                    <input type="number" name="price_per_floor" id="price_per_floor" class="form-control" value="{{ $order_settings->price_per_floor ?? '' }}" step="0.01" required>
                 </div>
-    
+
                 <div class="form-group">
-                    <label for="distance_limit_in_miles">Distance Limit in Miles</label>
-                    <input type="number" name="distance_limit_in_miles" id="distance_limit_in_miles" class="form-control" value="{{ $order_settings->distance_limit_in_miles ?? '' }}" required>
+                    <label for="distance_limit_in_floor">Distance Limit in Floor</label>
+                    <input type="number" name="distance_limit_in_floor" id="distance_limit_in_floor" class="form-control" value="{{ $order_settings->distance_limit_in_floor ?? '' }}" required>
                 </div>
-    
+
                 <button type="submit" class="btn btn-primary">Save</button>
             </form>
         </div>
     </div>
+    </div>
+
+      </div>
 
 
 
@@ -802,14 +696,14 @@
                             <input type="text" class="form-control" id="phone_number" name="phone_number" placeholder="Example: +44 123 456 7654" required>
                         </div>
 
- 
-                        
+
+
                         <div class="form-check form-check-flat form-check-primary">
 
                             <label class="form-check-label" for="use_whatsapp">
                             <input type="checkbox" class="form-check-input"  id="use_whatsapp" name="use_whatsapp" value="1">  Use WhatsApp <i class="input-helper"></i>
                             </label>
-                        
+
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -821,7 +715,7 @@
         </div>
     </div>
 
-    
+
 
 
 
@@ -958,8 +852,8 @@
     </div>
 </div>
 
- 
-    
+
+
 
 
 
@@ -988,7 +882,7 @@
         </div>
     </div>
 
-    
+
 
 
     <div class="modal fade" id="deleteAddressModal" tabindex="-1" aria-labelledby="deleteAddressModalLabel" aria-hidden="true">
@@ -1012,8 +906,8 @@
             </div>
         </div>
     </div>
-    
-   
+
+
 
 
 
@@ -1042,7 +936,7 @@
         </div>
     </div>
 
-    
+
     <div class="modal fade" id="deleteSocialMediaHandleModal" tabindex="-1" aria-labelledby="deleteAddressModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -1066,7 +960,7 @@
     </div>
 
 
-    
+
     </div>
     <!-- content-wrapper ends -->
     @include('partials.admin.footer')
@@ -1076,4 +970,3 @@
 
 
 
- 

@@ -13,30 +13,33 @@ class AddressSeeder extends Seeder
      */
     public function run(): void
     {
-        Address::create([
-            'user_id'     => 3,
-            'label'       => 'delivery',
-            'street'      => 'House 12, Road 5, Dhanmondi',
-            'city'        => 'Dhaka',
-            'state'       => 'Dhaka',
-            'postal_code' => '1205',
-            'country'     => 'Bangladesh',
-            'is_default'  => true,
-            'created_at'  => Carbon::now(),
-            'updated_at'  => Carbon::now(),
-        ]);
+        $buildings = ['Main Building', 'Second Building'];
 
-        Address::create([
-            'user_id'     => 3,
-            'label'       => 'delivery',
-            'street'      => 'House 45, Road 10, Uttara Sector 7',
-            'city'        => 'Dhaka',
-            'state'       => 'Dhaka',
-            'postal_code' => '1230',
-            'country'     => 'Bangladesh',
-            'is_default'  => false,
-            'created_at'  => Carbon::now(),
-            'updated_at'  => Carbon::now(),
+        foreach ($buildings as $building) {
+            for ($floor = 1; $floor <= 5; $floor++) {
+                for ($room = 1; $room <= 20; $room++) {
+
+                    $roomNumber = $floor . str_pad($room, 2, '0', STR_PAD_LEFT); // 101, 102...
+
+                    Address::create([
+                        'label'         => 'delivery',
+                        'building_name' => $building,
+                        'floor'         => $floor,
+                        'room_no'       => $roomNumber,
+                        'department'    => 'CSE',
+                        'campus'        => 'Main Campus',
+                        'notes'         => null,
+                        'is_default'    => false,
+                        'created_at'    => now(),
+                        'updated_at'    => now(),
+                    ]);
+                }
+            }
+        }
+
+        // 👉 Default address (optional)
+        Address::first()->update([
+            'is_default' => true
         ]);
     }
 }

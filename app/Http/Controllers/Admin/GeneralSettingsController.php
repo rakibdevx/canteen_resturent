@@ -7,7 +7,6 @@ use App\Models\SiteSetting;
 use Illuminate\Http\Request;
 use App\Models\OrderSettings;
 use App\Models\CompanyAddress;
-use App\Models\LiveChatScript;
 use App\Models\SocialMediaHandle;
 use App\Models\CompanyWorkingHour;
 use App\Http\Controllers\Controller;
@@ -15,7 +14,6 @@ use App\Http\Requests\AddressRequest;
 use App\Models\RestaurantPhoneNumber;
 use App\Http\Requests\PhoneNumberRequest;
 use App\Http\Requests\WorkingHourRequest;
-use App\Http\Requests\LiveChatScriptRequest;
 use App\Http\Requests\SocialMediaHandleRequest;
 use App\Http\Controllers\Traits\SanitizesInputTrait;
 use App\Http\Controllers\Traits\AdminViewSharedDataTrait;
@@ -29,16 +27,15 @@ class GeneralSettingsController extends Controller
     public function __construct()
     {
         $this->shareAdminViewData();
-        
+
     }
-    
+
     public function index()
     {
         $addresses = CompanyAddress::all();
         $phoneNumbers = RestaurantPhoneNumber::all();
         $workingHours = CompanyWorkingHour ::all();
         $socialMediaHandles = SocialMediaHandle::all();
-        $script = LiveChatScript::latest()->first();
         $order_settings = OrderSettings::latest()->first();
 
         $site_settings = SiteSetting::firstOrCreate([], [
@@ -50,7 +47,7 @@ class GeneralSettingsController extends Controller
 
 
 
-        return view('admin.general-settings', compact('addresses', 'phoneNumbers', 'workingHours','socialMediaHandles','script','order_settings', 'countries'));
+        return view('admin.general-settings', compact('addresses', 'phoneNumbers', 'workingHours','socialMediaHandles','order_settings', 'countries'));
     }
 
     // Restaurant Phone Number CRUD
@@ -61,44 +58,44 @@ class GeneralSettingsController extends Controller
         if ($request->has('use_whatsapp') && $request->use_whatsapp == 1) {
             RestaurantPhoneNumber::where('use_whatsapp', 1)->update(['use_whatsapp' => 0]);
         }
-    
+
         RestaurantPhoneNumber::create([
             'phone_number' => $request->phone_number,
             'use_whatsapp' => $request->has('use_whatsapp') ? 1 : 0,
         ]);
-    
+
         return back()->with('success', 'Phone number added successfully.');
     }
-    
-    
-    
+
+
+
 
     public function updatePhoneNumber(PhoneNumberRequest $request, $id)
     {
-    
+
         $phoneNumber = RestaurantPhoneNumber::findOrFail($id);
-    
+
         // If 'use_whatsapp' is checked, set all others to 0 first
         if ($request->has('use_whatsapp') && $request->use_whatsapp == 1) {
             RestaurantPhoneNumber::where('use_whatsapp', 1)->update(['use_whatsapp' => 0]);
         }
-    
+
         $phoneNumber->update([
             'phone_number' => $request->phone_number,
             'use_whatsapp' => $request->has('use_whatsapp') ? 1 : 0,
         ]);
-    
+
         return back()->with('success', 'Phone number updated successfully.');
     }
-    
-    
+
+
 
     public function deletePhoneNumber($id)
     {
         RestaurantPhoneNumber::findOrFail($id)->delete();
         return back()->with('success', 'Phone number deleted successfully.');
     }
-    
+
 
     // Company Address CRUD
     public function storeAddress(AddressRequest $request)
@@ -148,25 +145,25 @@ class GeneralSettingsController extends Controller
         SocialMediaHandle::create($request->all());
         return back()->with('success', 'Social media handle added successfully.');
     }
-    
+
     public function updateSocialMediaHandle(SocialMediaHandleRequest $request, $id)
     {
         $socialMediaHandle = SocialMediaHandle::findOrFail($id);
         $socialMediaHandle->update($request->all());
-    
+
         return back()->with('success', 'Social media handle updated successfully.');
     }
-    
+
 
     public function deleteSocialMediaHandle($id)
     {
         $socialMediaHandle = SocialMediaHandle::findOrFail($id);
         $socialMediaHandle->delete();
-    
+
         return back()->with('success', 'Social media handle deleted successfully.');
     }
-    
- 
+
+
 
 
 
@@ -229,54 +226,22 @@ public function deleteWorkingHour($id)
 
 
 
-    // live chat script CRUD
-    public function createLiveChatScript(LiveChatScriptRequest $request)
-    {
-        $validated = $request->validated();
-    
-        $validated['script_code'] = $this->sanitizeHtmlContent($validated['script_code']);
-    
-        LiveChatScript::create($validated);
-    
-        return redirect()->back()->with('success', 'Live chat script created successfully!');
-    }
-    
-
-
-    public function updateLiveChatScript(LiveChatScriptRequest $request, $id)
-    {
-        $script = LiveChatScript::findOrFail($id);
-        $script->update($request->validated());
-
-        return redirect()->back()->with('success', 'Live chat script updated successfully!');
-    }
-
-
-    public function destroyLiveChatScript($id)
-    {
-        $script = LiveChatScript::findOrFail($id);
-        $script->delete();
-
-        return redirect()->back()->with('success', 'Live chat script deleted successfully!');
-
-    }
-
     public function updateOrderSettings(Request $request)
     {
         $request->validate([
-            'price_per_mile' => 'required|numeric',
-            'distance_limit_in_miles' => 'required|integer',
+            'price_per_floor' => 'required|numeric',
+            'distance_limit_in_floor' => 'required|integer',
         ]);
 
         $settings = OrderSettings::firstOrNew();
-        $settings->price_per_mile = $request->input('price_per_mile');
-        $settings->distance_limit_in_miles = $request->input('distance_limit_in_miles');
+        $settings->price_per_floor = $request->input('price_per_floor');
+        $settings->distance_limit_in_floor = $request->input('distance_limit_in_floor');
         $settings->save();
 
         return redirect()->back()->with('success', 'Order Settings updated successfully!');
 
     }
- 
+
     public function siteSettings(Request $request)
     {
         $validated = $request->validate([
@@ -293,5 +258,5 @@ public function deleteWorkingHour($id)
 
         return redirect()->back()->with('success', 'Site settings saved successfully!');
     }
-    
+
 }

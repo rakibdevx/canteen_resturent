@@ -10,17 +10,13 @@ return new class extends Migration
     {
         Schema::create('addresses', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-
-            // Enum label: either 'delivery' or 'billing'
             $table->enum('label', ['delivery', 'billing'])->default('delivery');
-
-            // Address fields
-            $table->string('street')->nullable();
-            $table->string('city')->nullable();
-            $table->string('state')->nullable();
-            $table->string('postal_code')->nullable();
-            $table->string('country')->nullable();
+            $table->string('building_name')->nullable();
+            $table->string('floor')->nullable();
+            $table->string('room_no')->nullable();
+            $table->string('department')->nullable();
+            $table->string('campus')->nullable();
+            $table->text('notes')->nullable();
 
             // Optional flags
             $table->boolean('is_default')->default(false);

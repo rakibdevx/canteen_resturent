@@ -92,159 +92,17 @@
     <script src="/assets/js/datepicker.min.js"></script>
     <script src="/assets/js/mdtimepicker.min.js"></script>
     <script src="/assets/js/scripts.js"></script>
-
-    <script>
-      // ---- Helpers for option cards ----
-      function activateCard(groupSelector, card) {
-        document.querySelectorAll(groupSelector+' .option-card').forEach(c=>{
-          c.classList.remove('active'); c.setAttribute('aria-pressed','false');
-          const cm = c.querySelector('.checkmark'); if (cm) cm.innerHTML='';
-        });
-        card.classList.add('active'); card.setAttribute('aria-pressed','true');
-        const cm = card.querySelector('.checkmark'); if (cm) cm.innerHTML='&#10003;';
-      }
-
-      document.addEventListener('DOMContentLoaded', function(){
-        // Delivery mode (saved/new)
-        const deliveryModeField = document.getElementById('deliveryModeField');
-        const hasSaved = document.querySelectorAll('.delivery-saved-item').length > 0;
-        const defaultDeliveryMode = deliveryModeField.value || (hasSaved ? 'saved' : 'new');
-
-        const setDeliveryMode = (mode) => {
-          deliveryModeField.value = mode;
-          activateCard('#deliveryModeGroup', document.querySelector(`#deliveryModeGroup .option-card[data-value="${mode}"]`));
-          document.getElementById('delivery_saved_block').classList.toggle('d-none', mode !== 'saved');
-          document.getElementById('delivery_new_block').classList.toggle('d-none', mode !== 'new');
-        };
-
-        document.querySelectorAll('#deliveryModeGroup .option-card').forEach(card=>{
-          card.addEventListener('click', ()=> setDeliveryMode(card.getAttribute('data-value')));
-          card.addEventListener('keydown', (e)=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); setDeliveryMode(card.getAttribute('data-value')); }});
-        });
-        setDeliveryMode(defaultDeliveryMode);
-
-        // Toggle inline new-address fieldsets (no modals)
-        document.querySelectorAll('[data-toggle-inline]').forEach(btn=>{
-          btn.addEventListener('click', function(){
-            const target = document.querySelector(this.getAttribute('data-toggle-inline'));
-            if (!target) return;
-            target.classList.toggle('d-none');
-
-            // Focus the search input if present
-            const si = target.querySelector('input[data-places-search]');
-            if (si) setTimeout(()=> si.focus(), 10);
-          });
-        });
-      });
-
-      // ---- Simple Google Places hookup for delivery address ----
-      function initCheckoutDeliveryLookups() {
-          var input = document.getElementById('del_autocomplete');
-          if (!input || !window.google || !google.maps || !google.maps.places) {
-              return;
-          }
-
-          // Prevent Enter from submitting the form while searching
-          input.addEventListener('keydown', function (e) {
-              if (e.key === 'Enter') {
-                  e.preventDefault();
-              }
-          });
-
-          var ac = new google.maps.places.Autocomplete(input, {
-              types: ['geocode'],
-              fields: ['address_components', 'geometry', 'formatted_address']
-          });
-
-          ac.addListener('place_changed', function () {
-              var place = ac.getPlace();
-              if (!place || !place.address_components) {
-                  return;
-              }
-
-              var components = place.address_components;
-
-              function getComponent(type) {
-                  var comp = components.find(function (c) {
-                      return c.types.indexOf(type) !== -1;
-                  });
-                  return comp ? comp.long_name : '';
-              }
-
-              var streetNumber = getComponent('street_number');
-              var route        = getComponent('route');
-              var street       = [streetNumber, route].filter(Boolean).join(' ');
-
-              document.getElementById('del_line1').value      = street; // street
-              // del_line2 (Apt/Suite) left manual / readonly as you choose
-
-              document.getElementById('del_city').value       = getComponent('locality')
-                                                              || getComponent('postal_town')
-                                                              || getComponent('sublocality')
-                                                              || '';
-              document.getElementById('del_state').value      = getComponent('administrative_area_level_1');
-              document.getElementById('del_postal').value     = getComponent('postal_code');
-              document.getElementById('del_country').value    = getComponent('country');
-
-              if (place.geometry && place.geometry.location) {
-                  document.getElementById('del_latitude').value  = place.geometry.location.lat();
-                  document.getElementById('del_longitude').value = place.geometry.location.lng();
-              }
-          });
-      }
-
-      // Expose init function globally so Google Maps callback can call it
-      window.initCheckoutDeliveryLookups = initCheckoutDeliveryLookups;
-    </script>
-
-    {{-- Google Maps (Places) --}}
-    <script src="https://maps.googleapis.com/maps/api/js?key={{  config('services.google_maps.api_key') }}&libraries=places&callback=initCheckoutDeliveryLookups" async defer></script>
-
-    <script>
-    let addressToDeleteId = null;
-    let addressDeleteButton = null;
-
-    // Step 1: When user clicks delete
-    $(document).on('click', '.delete-address-btn', function (e) {
-        e.preventDefault();
-
-        addressToDeleteId = $(this).data('id');
-        addressDeleteButton = $(this);
-        const addressText = $(this).data('address') || '';
-
-        $('#addressToDelete').text(addressText);
-        $('#confirmDeleteModal').modal('show');
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('#addressSelect').select2({
+        placeholder: "Search & select address",
+        allowClear: true,
+        width: '100%'
     });
-
-    // Step 2: When user confirms deletion in modal
-    $('#confirmDeleteBtn').on('click', function () {
-        if (!addressToDeleteId) return;
-
-        const button = addressDeleteButton;
-        $(this).prop('disabled', true).text('Deleting...');
-
-        $.ajax({
-            url: `/customer/address/${addressToDeleteId}`,
-            type: 'DELETE',
-            data: { _token: '{{ csrf_token() }}' },
-            success: function (response) {
-                $('#confirmDeleteModal').modal('hide');
-                $('#confirmDeleteBtn').prop('disabled', false).html('<i class="fas fa-trash-alt me-1"></i> Delete');
-
-                if (response.success) {
-                    button.closest('label').fadeOut(300, function() { $(this).remove(); });
-                } else {
-                    alert(response.message || 'Failed to delete address.');
-                }
-            },
-            error: function () {
-                $('#confirmDeleteModal').modal('hide');
-                $('#confirmDeleteBtn').prop('disabled', false).html('<i class="fas fa-trash-alt me-1"></i> Delete');
-                alert('Error deleting address. Please try again.');
-            }
-        });
-    });
-    </script>
+});
+</script>
 
 @endpush
 
@@ -277,104 +135,31 @@
             @php $hasSaved = isset($addresses) && $addresses->count() > 0; @endphp
             <input type="hidden" name="mode" id="deliveryModeField" value="{{ old('mode', $hasSaved ? 'saved' : 'new') }}">
 
-            <div id="deliveryModeGroup" class="choice-grid mt-2">
-              <div class="option-card" data-value="saved" tabindex="0" role="button" aria-pressed="false">
-                <div class="checkmark"></div>
-                <h6 class="option-title">Use a Saved Address</h6>
-                <p class="option-sub">Pick from your address book.</p>
-              </div>
-              <div class="option-card" data-value="new" tabindex="0" role="button" aria-pressed="false">
-                <div class="checkmark"></div>
-                <h6 class="option-title">Add a New Address</h6>
-                <p class="option-sub">Search and add a new address.</p>
-              </div>
-            </div>
-
             {{-- ===== Saved addresses ===== --}}
             <div id="delivery_saved_block" class="mt-3 {{ $hasSaved ? '' : 'd-none' }}">
               @if($hasSaved)
                 <div class="list-group mb-3">
-                  @foreach($addresses as $addr)
-                    <label class="list-group-item d-flex justify-content-between align-items-start delivery-saved-item">
-                      <div class="form-check">
-                        <input class="form-check-input me-2"
-                               type="radio" name="saved_address_id"
-                               value="{{ $addr->id }}"
-                               {{ old('saved_address_id') == $addr->id ? 'checked' : '' }}>
-                        <div>
-                          <div class="fw-semibold">
-                            {{ $addr->street ?? '' }}{{ $addr->street && $addr->city ? ', ' : '' }}{{ $addr->city ?? '' }} {{ $addr->postal_code ?? '' }}
-                          </div>
-                          <small class="muted">
-                            {{ $addr->state ?? '' }}{{ ($addr->state && $addr->country) ? ', ' : '' }}{{ $addr->country ?? '' }}
-                           </small>
-                        </div>
-                      </div>
-                      <div class="d-flex gap-2">
-                        <button type="button"
-                                class="btn btn-sm btn-outline-danger delete-address-btn"
-                                data-id="{{ $addr->id }}"
-                                data-address="{{ $addr->street ?? '' }}, {{ $addr->city ?? '' }}">
-                          <i class="fas fa-times"></i>
-                        </button>
-                      </div>
-                    </label>
-                  @endforeach
+                    <Label for="addressSelect">Select a Address For Delivary</Label>
+                 <select name="saved_address_id" id="addressSelect" class="form-control">
+                    <option value="">Select Address</option>
+
+                    @foreach($addresses as $addr)
+                        <option value="{{ $addr->id }}" class="p-2"
+                            {{ old('saved_address_id') == $addr->id ? 'selected' : '' }}>
+
+                            {{ $addr->building_name }},
+                            {{ $addr->floor }},
+                            Room {{ $addr->room_no }} -
+                            {{ $addr->department }},
+                            {{ $addr->campus }}
+
+                        </option>
+                    @endforeach
+</select>
                 </div>
               @else
                 <div class="alert alert-info">You have no saved addresses yet.</div>
               @endif
-            </div>
-
-            {{-- ===== New delivery address (inline) ===== --}}
-            <div id="delivery_new_block" class="mt-3 {{ $hasSaved ? 'd-none' : '' }}">
-              <div id="delivery_new_inline" class="fieldset">
-                <label class="form-label">Search address</label>
-                <input type="text"
-                       id="del_autocomplete"
-                       class="form-control mb-3"
-                       placeholder="Start typing address..."
-                       data-places-search
-                       autocomplete="off" spellcheck="false">
-
-                <div class="row g-3">
-                  <div class="col-md-6">
-                    <label class="form-label">Street</label>
-                    <input id="del_line1" name="new[line1]" class="form-control"
-                           value="{{ old('new.line1') }}" readonly>
-                  </div>
-                  <div class="col-md-6">
-                    <label class="form-label">Apt / Suite</label>
-                    <input id="del_line2" name="new[line2]" class="form-control"
-                           value="{{ old('new.line2') }}" readonly>
-                  </div>
-
-                  <div class="col-md-6">
-                    <label class="form-label">City</label>
-                    <input id="del_city" name="new[city]" class="form-control"
-                           value="{{ old('new.city') }}" readonly>
-                  </div>
-                  <div class="col-md-6">
-                    <label class="form-label">State / Province</label>
-                    <input id="del_state" name="new[state]" class="form-control"
-                           value="{{ old('new.state') }}" readonly>
-                  </div>
-
-                  <div class="col-md-6">
-                    <label class="form-label">Postal Code</label>
-                    <input id="del_postal" name="new[postal_code]" class="form-control"
-                           value="{{ old('new.postal_code') }}" readonly>
-                  </div>
-                  <div class="col-md-6">
-                    <label class="form-label">Country</label>
-                    <input id="del_country" name="new[country]" class="form-control"
-                           value="{{ old('new.country') }}" readonly>
-                  </div>
-
-                  <input type="hidden" id="del_latitude" name="new[latitude]" value="{{ old('new.latitude') }}">
-                  <input type="hidden" id="del_longitude" name="new[longitude]" value="{{ old('new.longitude') }}">
-                </div>
-              </div>
             </div>
 
             {{-- Buttons --}}

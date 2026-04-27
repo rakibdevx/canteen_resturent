@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Traits;
 
 use App\Models\SiteSetting;
-use App\Models\LiveChatScript;
 use App\Models\CompanyAddress;
 use App\Models\SocialMediaHandle;
 use App\Models\RestaurantPhoneNumber;
@@ -15,8 +14,7 @@ trait MainSiteViewSharedDataTrait
     public function shareMainSiteViewData()
     {
         $this->cartkey = 'customer';
-        
-        $liveChatScript = LiveChatScript::latest()->first();
+
         $firstCompanyAddress = CompanyAddress::first();
         $firstRestaurantPhoneNumber = RestaurantPhoneNumber::first();
         $socialMediaHandles = SocialMediaHandle::orderBy('id', 'desc')->get();
@@ -29,10 +27,9 @@ trait MainSiteViewSharedDataTrait
             'currency_code' => config('site.currency_code'),
         ]);
 
-        
+
 
         view()->share([
-            'liveChatScript' => $liveChatScript,
             'whatsAppNumber' => $whatsAppNumber,
             'socialMediaHandles' => $socialMediaHandles,
             'firstCompanyAddress' => $firstCompanyAddress,

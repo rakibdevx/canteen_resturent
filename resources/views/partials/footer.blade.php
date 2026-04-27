@@ -1,4 +1,4 @@
- 
+
 <!-- START FOOTER -->
 <footer class="footer_dark pattern_top background_bg overlay_bg_80" data-img-src="/assets/images/footer_bg.jpg">
 	<div class="footer_top">
@@ -9,7 +9,7 @@
                         <div class="footer_logo">
                             <a href="index-6.html"><img src="/assets/images/logo_light.png" alt="logo"></a>
                         </div>
-                        <p>At {{ config('site.name') }}, we pride ourselves on bringing you the authentic flavors of West Africa. Our expertly crafted dishes and warm hospitality create a dining experience you won't forget.</p>
+                        <p>At {{ config('site.name') }}, we are dedicated to serving fresh, flavorful meals prepared with passion and care. Enjoy a warm and satisfying dining experience designed for every taste.</p>
                     </div>
                     <div class="widget">
                         <ul class="social_icons social_white social_style1 rounded_social">
@@ -25,7 +25,7 @@
                                         <a href="{{ "https://www.tiktok.com/@" . $handle->handle }}" target="_blank"><i class="fa fa-globe"></i></a>
                                     @endif
                                 </li>
-                                @endforeach                      
+                                @endforeach
                         </ul>
                     </div>
         		</div>
@@ -37,7 +37,7 @@
                             <li><a href="{{ route('menu') }}">Our Menu</a></li>
                             <li><a href="{{ route('about') }}">About us</a> </li>
                             <li><a href="{{ route('contact') }}">Contact us</a></li>
-                            
+
                             @if($whatsAppNumber)
                             <li> <a href="https://wa.me/{{ $whatsAppNumber->phone_number }}" target="_blank" ><i class="fa fa-whatsapp"></i> Chat us on Whatsapp</a></li>
                             @endif
@@ -51,7 +51,7 @@
                             @if($firstCompanyAddress) <li> <i class="ti-location-pin"></i> <p>{{ $firstCompanyAddress->full_address }}</p></li> @endif
 
                             <li> <i class="ti-email"></i>  <a href="mailto:{{ config('site.email') }}">{{ config('site.email') }}</a> </li>
-                        
+
                             @if($firstRestaurantPhoneNumber) <li> <i class="ti-mobile"></i> <p>{{ $firstRestaurantPhoneNumber->phone_number }}</p> </li> @endif
 
 

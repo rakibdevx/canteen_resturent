@@ -4,39 +4,34 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;    
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Address extends Model
 {
     use HasFactory;
-    use SoftDeletes;                            
+    use SoftDeletes;
 
     protected $fillable = [
-        'user_id',
         'label',
-        'street',
-        'city',
-        'state',
-        'postal_code',
-        'country',
-        'latitude',
-        'longitude',
+        'building_name',
+        'floor',
+        'room_no',
+        'department',
+        'campus',
+        'notes',
         'is_default',
     ];
 
-    // Relationship: each address belongs to a user
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
 
     public function getFullAddressAttribute()
     {
         $parts = array_filter([
-            $this->street,
-            $this->city,
-            $this->state,
-            $this->postal_code,
+            $this->building_name,
+            $this->floor,
+            $this->room_no,
+            $this->department,
+            $this->campus,
+            $this->notes,
         ]);
 
         return implode(', ', $parts);

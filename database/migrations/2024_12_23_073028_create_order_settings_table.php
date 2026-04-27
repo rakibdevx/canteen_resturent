@@ -9,8 +9,8 @@ class CreateOrderSettingsTable extends Migration
     {
         Schema::create('order_settings', function (Blueprint $table) {
             $table->id();
-            $table->decimal('price_per_mile', 8, 2);
-            $table->integer('distance_limit_in_miles');
+            $table->decimal('price_per_floor', 8, 2)->default(10.00);
+            $table->integer('distance_limit_in_floor')->default(10);
             $table->timestamps();
         });
     }

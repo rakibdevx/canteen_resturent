@@ -109,11 +109,11 @@
                             </tr>
                             <tr>
                                 <th>Delivery Distance</th>
-                                <td> {{ $order->delivery_distance === null ? 'N/A' : $order->delivery_distance . ' miles' }}</td>
+                                <td> {{ $order->delivery_distance === null ? 'N/A' : $order->delivery_distance . ' Floor' }}</td>
                             </tr>
                             <tr>
-                                <th>Price Per Mile</th>
-                                <td> {{ $order->price_per_mile === null ? 'N/A' : html_entity_decode($site_settings->currency_symbol) . number_format($order->price_per_mile,2) }}</td>
+                                <th>Price Per Floor</th>
+                                <td> {{ $order->price_per_floor === null ? 'N/A' : html_entity_decode($site_settings->currency_symbol) . number_format($order->price_per_floor,2) }}</td>
                             </tr>
 
                         </table>
