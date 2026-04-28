@@ -25,7 +25,7 @@ use App\Http\Controllers\Admin\PrivacyPolicyController;
 use App\Http\Controllers\Admin\GeneralSettingsController;
 use App\Http\Controllers\Admin\TermsAndConditionController;
 use App\Http\Controllers\Admin\TableBookingController as AdminTableBookingController;
-
+use App\Http\Controllers\Rider\RiderController;
 
 Route::get('/', [MainSiteController::class, 'home'])->name('home');
 
@@ -184,6 +184,7 @@ Route::prefix('admin')->middleware(RedirectIfNotAdmin::class)->group(function ()
     Route::get('order/{id}', [OrderController::class, 'show'])->name('admin.order.show');
     Route::post('order/create', [OrderController::class, 'createOrder'])->name('admin.order.store');
     Route::post('orders/update/{id}', [OrderController::class, 'update'])->name('admin.orders.update');
+    Route::post('orders/rider/{id}', [OrderController::class, 'rider'])->name('admin.rider.update');
     Route::delete('orders/destroy/{id}', [OrderController::class, 'destroy'])->name('admin.orders.destroy')->middleware(CheckRoleAdmin::class);
 
 
@@ -273,3 +274,17 @@ Route::prefix('admin')->middleware(RedirectIfNotAdmin::class)->group(function ()
 
 });
 
+Route::prefix('rider')->middleware(CheckRoleCustomer::class)->group(function () {
+
+    Route::get('/', [RiderController::class, 'account'])->name('rider.account');
+    Route::get('/orders/{filter?}', [RiderController::class, 'orders'])->name('rider.orders');
+    Route::get('/order-details/{id}', [RiderController::class, 'orderDetails'])->name('rider.order.details');
+
+    // Profile edit and update
+    Route::get('/edit-profile', [RiderController::class, 'editAccount'])->name('rider.edit.profile');
+    Route::put('/update-profile', [RiderController::class, 'updateAccount'])->name('rider.update.profile');
+
+    // Change password
+    Route::get('/change-password', [RiderController::class, 'showChangePasswordForm'])->name('rider.change.password');
+    Route::post('/change-password', [RiderController::class, 'changePassword'])->name('rider.change.password.post');
+});

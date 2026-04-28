@@ -12,6 +12,8 @@ use Yajra\DataTables\Facades\DataTables;
 use App\Http\Controllers\Traits\OrderStatisticsTrait;
 use App\Http\Controllers\Traits\AdminViewSharedDataTrait;
 use App\Http\Controllers\Traits\OrderNumberGeneratorTrait;
+use App\Models\User;
+use Illuminate\Validation\Rule;
 
 class OrderController extends Controller
 {
@@ -110,8 +112,8 @@ class OrderController extends Controller
     public function show($id)
     {
         $order = Order::with(['orderItems', 'createdByUser', 'updatedByUser', 'customer', 'pickupAddress', 'deliveryAddressWithTrashed'])->findOrFail($id);
-
-        return view('admin.orders-show', compact('order'));
+        $riders = User::where('role','rider')->get();
+        return view('admin.orders-show', compact('order','riders'));
     }
 
 
@@ -190,6 +192,27 @@ class OrderController extends Controller
 
         return back()->with('success', 'Order status updated successfully');
     }
+    public function rider(Request $request, $id)
+    {
+        // Validate
+        $request->validate([
+            'rider_id' => [
+                'required',
+                Rule::exists('users', 'id')->where(function ($query) {
+                    $query->where('role', 'rider');
+                }),
+            ],
+        ]);
+
+        $order = Order::findOrFail($id);
+
+        $order->update([
+            'rider_id'           => $request->rider_id,
+        ]);
+
+        return back()->with('success', 'Rider assigned successfully');
+    }
+
 
 
     public function destroy($id)

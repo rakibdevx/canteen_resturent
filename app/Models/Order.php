@@ -26,6 +26,7 @@ class Order extends Model
         'price_per_floor',
         'delivery_address_id',
         'pickup_address_id',
+        'rider_id',
     ];
 
     // Customer who placed the order
@@ -79,5 +80,10 @@ class Order extends Model
     {
         $this->orderItems()->delete();
         $this->delete();
+    }
+
+    public function rider()
+    {
+        return $this->belongsTo(User::class, 'rider_id');
     }
 }

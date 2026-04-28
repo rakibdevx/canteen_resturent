@@ -75,20 +75,23 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <span>Order Details - #{{ $order->order_no }} </span>
+                <span>
+                    <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#assinModal">
+                        Assign A Rider
+                    </button>
 
-                @if (
-                    $order->payment_method == 'Cash On Delivery' ||
-                    $order->status_online_pay == 'paid' ||
-                    is_null($order->status_online_pay)
-                )
-                    @if ($order->status !== 'completed' && $order->status !== 'cancelled')
-                        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#updateModal">
-                            Update Order
-                        </button>
+                    @if (
+                        $order->payment_method == 'Cash On Delivery' ||
+                        $order->status_online_pay == 'paid' ||
+                        is_null($order->status_online_pay)
+                    )
+                        @if ($order->status !== 'completed' && $order->status !== 'cancelled')
+                            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#updateModal">
+                                Update Order
+                            </button>
+                        @endif
                     @endif
-                @endif
-
-
+                </span>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -404,6 +407,38 @@
                                 <select class="form-control" id="orderStatus" name="status">
                                     <option value="completed" {{ $order->status == 'completed' ? 'selected' : '' }}>Completed</option>
                                     <option value="cancelled" {{ $order->status == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Update</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="assinModal" tabindex="-1" role="dialog" aria-labelledby="assinModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="assinModalLabel">Assign a Rider</h5>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{{ route('admin.rider.update', $order->id) }}" method="POST">
+                            @csrf
+                            <div class="form-group">
+                                <label for="rider">Riders</label>
+                                <select class="form-control" id="rider" name="rider_id">
+                                    @foreach ($riders as $rider)
+                                    <option value="{{ $rider->id }}">
+                                        {{ implode(' ', array_filter([
+                                            $rider->first_name,
+                                            $rider->middle_name,
+                                            $rider->last_name
+                                        ])) }}({{$rider->id}})
+                                    </option>
+                                    @endforeach
                                 </select>
                             </div>
                             <button type="submit" class="btn btn-primary">Update</button>

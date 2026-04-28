@@ -24,7 +24,10 @@
                     <li><a href="{{ route('customer.account') }}">My Account</a></li>
                     <li><a href="{{ route('customer.orders') }}">My Orders</a></li>
                     <li><a href="{{ route('customer.change.password') }}">Change Password</a></li>
-
+                @elseif (Auth::user()->role === 'rider')
+                    <li><a href="{{ route('rider.account') }}">My Account</a></li>
+                    <li><a href="{{ route('rider.orders') }}">My Orders</a></li>
+                    <li><a href="{{ route('rider.change.password') }}">Change Password</a></li>
                 @endif
                 <li><a href="{{ route('auth.logout') }}">Logout</a></li>
                 <li><a href="{{ route('home') }}">Home</a></li>

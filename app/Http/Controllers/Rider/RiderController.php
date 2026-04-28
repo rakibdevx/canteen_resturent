@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Customer;
+namespace App\Http\Controllers\Rider;
 
-use App\Models\User;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -14,7 +14,9 @@ use App\Http\Requests\UpdateProfileRequest;
 use App\Http\Controllers\Traits\OrderNumberGeneratorTrait;
 use App\Http\Controllers\Traits\MainSiteViewSharedDataTrait;
 
-class CustomerController extends Controller
+
+
+class RiderController extends Controller
 {
 
 
@@ -40,8 +42,9 @@ class CustomerController extends Controller
             $filter = 'all';
         }
 
-        // Base query — only orders the customer owns AND must be paid
-        $ordersQuery = $user->customerOrders()
+        // Base query — only orders the rider owns AND must be paid
+        $ordersQuery = $user->riderOrders()
+                            ->where('status_online_pay', 'paid')
                             ->with('orderItems');
 
         // Apply status filter
@@ -51,7 +54,7 @@ class CustomerController extends Controller
 
         $orders = $ordersQuery->orderBy('created_at', 'desc')->get();
 
-        return view('customer.orders', compact('user', 'orders', 'filter'));
+        return view('rider.orders', compact('user', 'orders', 'filter'));
     }
 
 
@@ -59,16 +62,16 @@ class CustomerController extends Controller
     public function orderDetails($id)
     {
         $user = Auth::User();
-        $order = $user->customerOrders()->with(['orderItems', 'deliveryAddressWithTrashed', 'pickupAddress'])->findOrFail($id);
+        $order = $user->riderOrders()->with(['orderItems', 'deliveryAddressWithTrashed', 'pickupAddress'])->findOrFail($id);
 
-        return view('customer.order-details', compact('user', 'order'));
+        return view('rider.order-details', compact('user', 'order'));
     }
 
-    // Show the customer account
+    // Show the rider account
     public function account()
     {
         $user = Auth::User();
-        return view('customer.account', compact('user'));
+        return view('rider.account', compact('user'));
     }
 
 
@@ -77,7 +80,7 @@ class CustomerController extends Controller
         public function editAccount()
     {
         $user = Auth::User();
-        return view('customer.edit-account', compact('user'));
+        return view('rider.edit-account', compact('user'));
     }
 
     public function updateAccount(UpdateProfileRequest $request)
@@ -108,7 +111,7 @@ class CustomerController extends Controller
         $user->save();
 
         // Return success message
-        return redirect()->route('customer.account')->with('success', 'Profile updated successfully.');
+        return redirect()->route('rider.account')->with('success', 'Profile updated successfully.');
     }
 
 
@@ -116,7 +119,7 @@ class CustomerController extends Controller
     {
         $user = Auth::User();
 
-        return view('customer.change-password', compact('user'));
+        return view('rider.change-password', compact('user'));
     }
 
 
@@ -148,14 +151,14 @@ class CustomerController extends Controller
     // Show the account creation form
     public function create()
     {
-        return view('customer.create-account');
+        return view('rider.create-account');
     }
 
-    // Store a new customer
+    // Store a new rider
     public function store(Request  $request)
     {
-        // user role as customer
-        $request->merge(['role' => 'customer']);
+        // user role as rider
+        $request->merge(['role' => 'rider']);
 
         // Validate using CreateUserRequest rules
         $validated = app(CreateUserRequest::class)->validateResolved();

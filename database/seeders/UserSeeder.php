@@ -52,6 +52,24 @@ class UserSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+        DB::table('users')->insert([
+            'first_name' => 'Rakibul',
+            'middle_name' => '',
+            'last_name' => 'Islam',
+            'email' => 'rider@example.com',
+            'password' => Hash::make('password'), // Hashed password
+            'role' => 'rider',
+            'status' => 1,
+            'phone_number' => '01111111111',
+            'address' => 'Airport,DHaka,Bangladesh',
+            'profile_picture' => null,
+            'activation_token' => null,
+            'remember_token' => null,
+            'two_factor_auth' => 0,
+            'email_verified_at' => now(),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
     }
 }
 

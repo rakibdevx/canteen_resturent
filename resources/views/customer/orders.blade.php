@@ -2,13 +2,13 @@
 
 @push('styles')
     <!-- Animation CSS -->
-    <link rel="stylesheet" href="/assets/css/animate.css">	
+    <link rel="stylesheet" href="/assets/css/animate.css">
     <!-- Latest Bootstrap min CSS -->
     <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
     <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css?family=Kaushan+Script&amp;display=swap" rel="stylesheet"> 
-    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans:100,100i,300,300i,400,400i,600,600i,700,700i&amp;display=swap" rel="stylesheet"> 
-    <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i&amp;display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css?family=Kaushan+Script&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans:100,100i,300,300i,400,400i,600,600i,700,700i&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i&amp;display=swap" rel="stylesheet">
     <!-- Icon Font CSS -->
     <link rel="stylesheet" href="/assets/css/all.min.css">
     <link rel="stylesheet" href="/assets/css/ionicons.min.css">
@@ -142,25 +142,25 @@
 @endpush
 
 @push('scripts')
-    <!-- Latest jQuery --> 
-    <script src="/assets/js/jquery-1.12.4.min.js"></script> 
-    <!-- Latest compiled and minified Bootstrap --> 
-    <script src="/assets/bootstrap/js/bootstrap.min.js"></script> 
-    <!-- owl-carousel min js  --> 
-    <script src="/assets/owlcarousel/js/owl.carousel.min.js"></script> 
-    <!-- magnific-popup min js  --> 
-    <script src="/assets/js/magnific-popup.min.js"></script> 
-    <!-- waypoints min js  --> 
-    <script src="/assets/js/waypoints.min.js"></script> 
-    <!-- parallax js  --> 
-    <script src="/assets/js/parallax.js"></script> 
-    <!-- countdown js  --> 
-    <script src="/assets/js/jquery.countdown.min.js"></script> 
+    <!-- Latest jQuery -->
+    <script src="/assets/js/jquery-1.12.4.min.js"></script>
+    <!-- Latest compiled and minified Bootstrap -->
+    <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
+    <!-- owl-carousel min js  -->
+    <script src="/assets/owlcarousel/js/owl.carousel.min.js"></script>
+    <!-- magnific-popup min js  -->
+    <script src="/assets/js/magnific-popup.min.js"></script>
+    <!-- waypoints min js  -->
+    <script src="/assets/js/waypoints.min.js"></script>
+    <!-- parallax js  -->
+    <script src="/assets/js/parallax.js"></script>
+    <!-- countdown js  -->
+    <script src="/assets/js/jquery.countdown.min.js"></script>
     <!-- jquery.countTo js  -->
     <script src="/assets/js/jquery.countTo.js"></script>
-    <!-- imagesloaded js --> 
+    <!-- imagesloaded js -->
     <script src="/assets/js/imagesloaded.pkgd.min.js"></script>
-    <!-- isotope min js --> 
+    <!-- isotope min js -->
     <script src="/assets/js/isotope.min.js"></script>
     <!-- jquery.appear js  -->
     <script src="/assets/js/jquery.appear.js"></script>
@@ -172,7 +172,7 @@
     <script src="/assets/js/datepicker.min.js"></script>
     <!-- TimePicker js -->
     <script src="/assets/js/mdtimepicker.min.js"></script>
-    <!-- scripts js --> 
+    <!-- scripts js -->
     <script src="/assets/js/scripts.js"></script>
 
     <script src="https://js.stripe.com/v3/"></script>
@@ -271,7 +271,7 @@
                             @else
                                 <strong>You don't have any {{ ucfirst($filter) }} orders yet.</strong>
                             @endif
-                 
+
                         </div>
 
                     @else
@@ -283,6 +283,7 @@
                                         <th>Date</th>
                                         <th>Type</th>
                                         <th>Amount</th>
+                                        <th>Payment Method</th>
                                         <th>Status</th>
                                     </tr>
                                 </thead>
@@ -303,6 +304,11 @@
                                             <td data-label="Amount">
                                                 <span class="fw-semibold">
                                                     {!! $site_settings->currency_symbol ?? '£' !!}{{ number_format($order->total_price, 2) }}
+                                                </span>
+                                            </td>
+                                            <td data-label="Type">
+                                                <span class="text-capitalize">
+                                                    {{ $order->payment_method ?? 'Cash' }}
                                                 </span>
                                             </td>
                                             <td data-label="Status">
