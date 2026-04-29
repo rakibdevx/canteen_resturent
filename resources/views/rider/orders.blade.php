@@ -252,7 +252,7 @@
                         @foreach($filters as $key => $label)
                             <li class="nav-item">
                                 <a
-                                    href="{{ route('customer.orders', $key === 'all' ? null : $key) }}"
+                                    href="{{ route('rider.orders', $key === 'all' ? null : $key) }}"
                                     class="nav-link {{ ($filter ?? 'all') === $key ? 'active' : '' }}"
                                 >
                                     {{ $label }}
@@ -291,7 +291,7 @@
                                     @foreach($orders as $order)
                                         <tr>
                                             <td data-label="Order No">
-                                                <a href="{{ route('customer.order.details', $order->id) }}"><span class="fw-semibold">#{{ $order->order_no }}</span></a>
+                                                <a href="{{ route('rider.order.details', $order->id) }}"><span class="fw-semibold">#{{ $order->order_no }}</span></a>
                                             </td>
                                             <td data-label="Date">
                                                 {{ optional($order->created_at)->format('d M Y, H:i') }}
@@ -303,7 +303,7 @@
                                             </td>
                                             <td data-label="Amount">
                                                 <span class="fw-semibold">
-                                                    {!! $site_settings->currency_symbol ?? '£' !!}{{ number_format($order->total_price + ($order->delivery_fee ?? 0), 2) }}
+                                                    {!! $site_settings->currency_symbol ?? '£' !!}{{ number_format($order->total_price, 2) }}
                                                 </span>
                                             </td>
                                             <td data-label="Type">
@@ -323,7 +323,7 @@
                                                 <span class="order-status-badge {{ $statusClass }}">
                                                     {{ $status }}
                                                 </span>
-                                                <a href="{{ route('customer.order.details',$order->id) }}">Show</a>
+                                                <a href="{{ route('rider.order.details',$order->id) }}">Show</a>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -335,16 +335,16 @@
 
                 <!-- Bottom action buttons -->
                 <div class="acct-ql d-flex flex-wrap gap-2 mt-4">
-                    <a href="{{ route('customer.edit.profile') }}" class="btn btn-sm">
+                    <a href="{{ route('rider.edit.profile') }}" class="btn btn-sm">
                         <i class="fas fa-user-edit me-2"></i>Edit Account
                     </a>
-                    <a href="{{ route('customer.change.password') }}" class="btn btn-sm">
+                    <a href="{{ route('rider.change.password') }}" class="btn btn-sm">
                         <i class="fas fa-key me-2"></i>Change Password
                     </a>
                     <a href="{{ route('home') }}" class="btn btn-sm">
                         <i class="fas fa-shopping-bag me-2"></i>Return to Shopping
                     </a>
-                    <a href="{{ route('customer.orders') }}" class="btn btn-sm">
+                    <a href="{{ route('rider.orders') }}" class="btn btn-sm">
                         <i class="fas fa-file-invoice-dollar me-2"></i>My Orders
                     </a>
                     <a href="{{ route('auth.logout') }}" class="btn btn-sm">

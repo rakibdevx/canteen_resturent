@@ -184,7 +184,7 @@
                     <div class="text-md-end">
                         <div class="text-dark-50 small">Total</div>
                         <div style="font-size:1.4rem; font-weight:800;">
-                            {!! $site_settings->currency_symbol ?? '£' !!}{{ number_format($order->total_price + ($order->delivery_fee ?? 0), 2) }}
+                            {!! $site_settings->currency_symbol ?? '£' !!}{{ number_format($order->total_price, 2) }}
                         </div>
                         @if($order->payment_method)
                             <div class="text-dark-50 small mt-1">
@@ -192,12 +192,29 @@
                             </div>
                         @endif
                         <div class="mt-3 d-flex justify-content-md-end gap-2">
-                            <a href="{{ route('customer.orders') }}" class="btn btn-sm btn-light">
+                            <a href="{{ route('rider.orders') }}" class="btn btn-sm btn-warning text-white">
                                 <i class="fas fa-arrow-left me-1"></i> Back to Orders
                             </a>
-                            <a href="{{ route('home') }}" class="btn btn-sm btn-light">
+                            <a href="{{ route('home') }}" class="btn btn-sm btn-info">
                                 <i class="fas fa-shopping-bag me-1"></i> Return to Shopping
-                            </a>
+                            </a>                            
+                        </div>
+                        <div class="d-flex justify-content-end mt-3">
+                           @if ($order->status != "completed" && $order->status != "cancelled")
+                                <button 
+                                    class="btn btn-sm btn-success confirm-delivery-btn"
+                                    data-url="{{ route('rider.otp', $order->id) }}">
+                                    <i class="fas fa-check me-1"></i> Confirm Delivery
+                                </button>                              
+                            @elseif($order->status == "cancelled")
+                                <span class="btn btn-sm btn-danger">Cancelled</span>
+
+                            @elseif ($order->status == "pending")
+                                <span class="btn btn-sm btn-warning text-white">Pending</span>
+
+                            @else
+                                <span class="btn btn-sm btn-info">{{ ucfirst($order->status) }}</span>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -233,7 +250,7 @@
                                         <td colspan="2" class="text-end fw-semibold">Items Subtotal</td>
                                         <td class="text-end fw-semibold">
                                             {!! $site_settings->currency_symbol ?? '£' !!}
-                                            {{ number_format($order->total_price , 2) }}
+                                            {{ number_format($order->total_price - ($order->delivery_fee ?? 0), 2) }}
                                         </td>
                                     </tr>
 
@@ -245,12 +262,6 @@
                                             </td>
                                         </tr>
                                     @endif
-                                    <tr>
-                                        <td colspan="2" class="text-end">Total Amount</td>
-                                        <td class="text-end">
-                                            {!! $site_settings->currency_symbol ?? '£' !!}{{ number_format($order->total_price + $order->delivery_fee, 2) }}
-                                        </td>
-                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -288,35 +299,26 @@
                             </div>
                         </div>
                         @endif
-                        @if($order->order_type == 'pickup')
-                            @if($order->rider)
-                                <div class="mb-3">
-                                    <div class="section-hd">Rider Info</div>
+                        <div class="mb-3">
+                            <div class="section-hd">Customer Info</div>
+                            @php
+                                $customerName = implode(' ', array_filter([
+                                    $order->customer?->first_name,
+                                    $order->customer?->middle_name,
+                                    $order->customer?->last_name
+                                ]));
+                            @endphp
 
-                                    @php
-                                        $riderName = implode(' ', array_filter([
-                                            $order->rider?->first_name,
-                                            $order->rider?->middle_name,
-                                            $order->rider?->last_name
-                                        ]));
-                                    @endphp
+                            <div class="addr-card">
+                                <div class="fw-semibold mb-1">Name</div>
+                                <div>{{ $customerName }}</div>
+                            </div>
 
-                                    <div class="addr-card">
-                                        <div class="fw-semibold mb-1">Name</div>
-                                        <div>{{ $riderName }}</div>
-                                    </div>
-
-                                    <div class="addr-card">
-                                        <div class="fw-semibold mb-1">Phone</div>
-                                        <div>{{ $order->rider->phone_number ?? '' }}</div>
-                                    </div>
-                                </div>
-                            @else
-                            <div class="section-hd">No Rider Assign</div>
-                            @endif
-                        @else
-                        <div class="section-hd">PickUp Order</div>
-                        @endif
+                            <div class="addr-card">
+                                <div class="fw-semibold mb-1">Phone</div>
+                                <div>{{ $order->customer->phone_number ?? '' }}</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -324,4 +326,91 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="otpModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Enter OTP</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <div>
+                    <div id="error_text" class="alert alert-danger d-none" role="alert"></div>
+                    <div id="success_text" class="alert alert-success d-none" role="alert"></div>
+                </div>
+                <input type="text" id="otp_input" class="form-control" placeholder="Enter OTP">
+                <input type="hidden" id="order_id">
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-primary verify-otp">Verify</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 @endsection
+@push('scripts')
+    <script>
+        $(document).on('click', '.confirm-delivery-btn', function () {
+
+        let url = $(this).data('url');
+
+        $.ajax({
+            url: url, 
+            type: "GET",
+            success: function (res) {
+                $('#order_id').val(res.order_id);
+                $('#otpModal').modal('show');
+                $('#error_text').addClass('d-none');
+                $('#error_text').text();
+                $('#success_text').removeClass('d-none');
+                $('#success_text').text("Otp Sent Successfully");
+            },
+            error: function () {
+                $('#success_text').text('');
+                $('#success_text').addClass('d-none');
+                $('#error_text').removeClass('d-none');
+                 $('#error_text').text("Failed to send OTP");
+            }
+        });
+    });
+
+
+    // verify OTP
+    $(document).on('click', '.verify-otp', function () {
+
+        let otp = $('#otp_input').val();
+        let orderId = $('#order_id').val();
+
+        $.ajax({
+            url: "{{ route('rider.order_confirm') }}",
+            type: "POST",
+            data: {
+                _token: "{{ csrf_token() }}",
+                otp: otp,
+                order_id: orderId
+            },
+            success: function (res) {
+                $('#error_text').addClass('d-none');
+                $('#error_text').text('');
+                $('#success_text').removeClass('d-none');
+                $('#success_text').text(res.message);
+                 setTimeout(function () {
+                    location.reload();
+                }, 2000);
+            },
+            error: function (xhr) {
+                $('#success_text').text('');
+                $('#success_text').addClass('d-none');
+                $('#error_text').removeClass('d-none');
+                $('#error_text').text(xhr.responseJSON?.message || 'Invalid OTP');
+            }
+        });
+
+    });
+    </script>
+@endpush

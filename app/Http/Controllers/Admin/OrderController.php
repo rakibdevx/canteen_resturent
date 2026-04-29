@@ -14,6 +14,9 @@ use App\Http\Controllers\Traits\AdminViewSharedDataTrait;
 use App\Http\Controllers\Traits\OrderNumberGeneratorTrait;
 use App\Models\User;
 use Illuminate\Validation\Rule;
+use App\Mail\RiderAssignNotification;
+use Illuminate\Support\Facades\Mail;
+
 
 class OrderController extends Controller
 {
@@ -43,7 +46,7 @@ class OrderController extends Controller
 
         if ($request->ajax()) {
 
-            $orders = Order::select(['id', 'order_no', 'created_at', 'total_price', 'status','status_online_pay', 'order_type'])->orderBy('id', 'desc');
+            $orders = Order::select(['id', 'order_no', 'created_at','delivery_fee', 'total_price', 'status','status_online_pay', 'order_type'])->orderBy('id', 'desc');
 
 
             // Apply filters based on the user's selection
@@ -51,7 +54,7 @@ class OrderController extends Controller
                 if ($filter == 'pending') {
                     $orders = $orders->where('status', 'pending');
                 } elseif ($filter == 'online') {
-                    $orders = $orders->where('order_type', 'online');
+                    $orders = $orders->where('order_type', 'delivery')->orWhere('order_type', 'pickup');
                 } elseif ($filter == 'instore') {
                     $orders = $orders->where('order_type', 'instore');
                 }
@@ -78,7 +81,7 @@ class OrderController extends Controller
                         $site_settings      =   SiteSetting::latest()->first();
                         $currency_symbol    =   $site_settings->currency_symbol ?? config('site.currency_symbol');
 
-                        return html_entity_decode($currency_symbol) . number_format($order->total_price, 2);
+                        return html_entity_decode($currency_symbol) . number_format($order->total_price + ($order->delivery_fee ?? 0), 2);
 
                     })
                     ->editColumn('status', function ($order) {
@@ -204,11 +207,15 @@ class OrderController extends Controller
             ],
         ]);
 
+        $user = User::findOrFail($request->rider_id);
         $order = Order::findOrFail($id);
 
+        // assign rider
         $order->update([
-            'rider_id'           => $request->rider_id,
+            'rider_id' => $user->id,
         ]);
+
+        Mail::to($user->email)->queue(new RiderAssignNotification($user,$order));
 
         return back()->with('success', 'Rider assigned successfully');
     }

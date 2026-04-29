@@ -11,13 +11,13 @@ class NewAccountNotification extends Mailable
     use Queueable, SerializesModels;
 
     public $user;
-    public $password;
+    public $email;
     public $subject;
 
-    public function __construct($user, $password)
+    public function __construct($user, $email)
     {
         $this->user = $user;
-        $this->password = $password;
+        $this->email = $email;
         $this->subject = config('site.name') . " - New Account";   
     }
 

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Middleware\CheckRoleAdmin;
 use App\Http\Middleware\CheckRoleCustomer;
+use App\Http\Middleware\CheckRoleRider;
 use App\Http\Controllers\PaymentController;
 use App\Http\Middleware\RedirectIfNotAdmin;
 use App\Http\Controllers\MainSiteController;
@@ -274,7 +275,7 @@ Route::prefix('admin')->middleware(RedirectIfNotAdmin::class)->group(function ()
 
 });
 
-Route::prefix('rider')->middleware(CheckRoleCustomer::class)->group(function () {
+Route::prefix('rider')->middleware(CheckRoleRider::class)->group(function () {
 
     Route::get('/', [RiderController::class, 'account'])->name('rider.account');
     Route::get('/orders/{filter?}', [RiderController::class, 'orders'])->name('rider.orders');
@@ -287,4 +288,7 @@ Route::prefix('rider')->middleware(CheckRoleCustomer::class)->group(function () 
     // Change password
     Route::get('/change-password', [RiderController::class, 'showChangePasswordForm'])->name('rider.change.password');
     Route::post('/change-password', [RiderController::class, 'changePassword'])->name('rider.change.password.post');
+
+    Route::get('/otp/{id}', [RiderController::class, 'otp'])->name('rider.otp');
+    Route::post('/confirm', [RiderController::class, 'order_confirm'])->name('rider.order_confirm');
 });

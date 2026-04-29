@@ -136,7 +136,7 @@
 
                     @include('partials.message-bag')
 
-                    <form method="POST" action="{{ route('password.update') }}">
+                    <form method="POST" action="{{ route('auth.password.update') }}">
                         @csrf
                         <input type="hidden" name="token" value="{{ $token }}">
 

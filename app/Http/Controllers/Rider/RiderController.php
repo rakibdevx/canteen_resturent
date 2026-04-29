@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Rider;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\OtpEmail;
 use App\Http\Requests\CreateUserRequest;
 use App\Http\Controllers\Traits\CartTrait;
 use App\Http\Requests\UpdateProfileRequest;
@@ -34,20 +36,15 @@ class RiderController extends Controller
     {
         $user = Auth::user();
 
-        // Allowed status filters
         $allowedFilters = ['all', 'pending', 'completed', 'cancelled'];
 
-        // Validate filter
         if (!in_array($filter, $allowedFilters)) {
             $filter = 'all';
         }
 
-        // Base query — only orders the rider owns AND must be paid
-        $ordersQuery = $user->riderOrders()
-                            ->where('status_online_pay', 'paid')
-                            ->with('orderItems');
+        $ordersQuery = Order::where('rider_id', $user->id)
+            ->with('orderItems');
 
-        // Apply status filter
         if ($filter !== 'all') {
             $ordersQuery->where('status', $filter);
         }
@@ -58,11 +55,14 @@ class RiderController extends Controller
     }
 
 
-
-    public function orderDetails($id)
+   public function orderDetails($id)
     {
-        $user = Auth::User();
-        $order = $user->riderOrders()->with(['orderItems', 'deliveryAddressWithTrashed', 'pickupAddress'])->findOrFail($id);
+        $user = Auth::user();
+
+        $order = \App\Models\Order::where('id', $id)
+            ->where('rider_id', $user->id)
+            ->with(['orderItems', 'deliveryAddressWithTrashed', 'pickupAddress'])
+            ->firstOrFail();
 
         return view('rider.order-details', compact('user', 'order'));
     }
@@ -142,61 +142,72 @@ class RiderController extends Controller
         $user->save();
 
         // Send password changed notification email
-        Mail::to($user->email)->send(new PasswordChangedNotification($user));
+        Mail::to($user->email)->queue(new PasswordChangedNotification($user));
 
         return redirect()->route('admin.dashboard')->with('success', 'Your password has been successfully updated.');
     }
 
 
-    // Show the account creation form
-    public function create()
+    public function otp($id)
     {
-        return view('rider.create-account');
-    }
+        $order = Order::findOrFail($id);
 
-    // Store a new rider
-    public function store(Request  $request)
-    {
-        // user role as rider
-        $request->merge(['role' => 'rider']);
+        $otp = random_int(1000, 9999);
 
-        // Validate using CreateUserRequest rules
-        $validated = app(CreateUserRequest::class)->validateResolved();
+        $order->otp = $otp;
+        $order->otp_expire = now()->addMinutes(5);
+        $order->save();
 
-        $user = User::create([
-            'first_name' => $request->first_name,
-            'middle_name' => $request->middle_name,
-            'last_name' => $request->last_name,
-            'email' => $request->email,
-            'phone_number' => $request->phone_number,
-            'role' =>  $request->role,
-            'password' => Hash::make($request->password),
-            'notice' => null,
-            'status' => 1,
-        ]);
+        try {
+            Mail::to($order->customer->email)
+                ->queue(new OtpEmail(
+                    $order->customer,
+                    $otp,
+                    $order->order_no
+                ));
+        } catch (\Exception $e) {
+            \Log::error('Order OTP email failed: ' . $e->getMessage());
 
-        if ($user) {
-
-            // try {
-            //     // Send email welcome message
-            //     Mail::to($user->email)->send(new NewAccountNotification($user, $user->email));
-            //     $message = ['success' => 'User created successfully. Login details sent to user email.'];
-            // } catch (TransportExceptionInterface $e) {
-
-            //     $message = [
-            //         'success' => 'User created successfully.',
-            //         'error' => 'Failed to send email: ' . $e->getMessage()
-            //     ];
-            // }
-
-            $message = ['success' => 'Account created successfully. You can now log in.'];
-            auth()->login($user);
-            return redirect()->route('home')->with($message);
-        } else {
-            $message = ['error' => 'Failed to create account. Please try again.'];
-            return redirect()->back()->withInput()->with($message);
+            return response()->json([
+                'message' => 'Failed to send OTP'
+            ], 500);
         }
 
+        // ✅ IMPORTANT: JSON return
+        return response()->json([
+            'message' => 'OTP sent successfully',
+            'order_id' => $order->id
+        ]);
+    }
+
+    public function order_confirm(Request $request)
+    {
+        $order = Order::findOrFail($request->order_id);
+
+        // ❗ expire check
+        if (now()->gt($order->otp_expire)) {
+            return response()->json([
+                'message' => 'OTP expired'
+            ], 400);
+        }
+
+        if ($order->otp == $request->otp) {
+
+            $order->update([
+                'status' => 'completed',
+                'status_online_pay' => 'paid' ,
+                'otp' => null,
+                'otp_expire' => null
+            ]);
+
+            return response()->json([
+                'message' => 'Delivery confirmed successfully'
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'Invalid OTP'
+        ], 400);
     }
 
 }

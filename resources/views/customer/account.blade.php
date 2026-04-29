@@ -88,7 +88,7 @@
 @endpush
 
 
-@section('title', 'Create Account')
+@section('title', 'Account')
 
 
 @section('header')

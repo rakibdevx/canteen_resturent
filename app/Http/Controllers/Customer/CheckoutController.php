@@ -7,6 +7,8 @@ use App\Models\Order;
 use App\Models\Address;
 use App\Models\SiteSetting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\OrderEmail;
 use App\Models\OrderSettings;
 use App\Models\CompanyAddress;
 use App\Helpers\DistanceHelper;
@@ -300,7 +302,7 @@ class CheckoutController extends Controller
                 'order_type'         => $fulfilment,
                 'created_by_user_id' => null,
                 'updated_by_user_id' => null,
-                'total_price'        => $total,
+                'total_price'        => $subtotal,
                 'status'             => 'pending',
                 'status_online_pay'  => 'unpaid',
                 'session_id'         => null,
@@ -365,6 +367,23 @@ class CheckoutController extends Controller
         }
 
         if ($payment_method === 'cod') {
+            try {
+                Mail::to($order->customer->email)->queue(new OrderEmail(
+                    $order->orderItems,
+                    $order->customer->first_name,
+                    $order->customer->email,
+                    $order->order_no,
+                    $order->delivery_fee,
+                    $order->total_price,
+                    config('site.email'),
+                ));
+            } catch (Exception $e) {
+                Log::error('Order email failed to send: ' . $e->getMessage());
+            }
+
+            session()->forget($this->cartkey);
+            session()->forget(self::SESSION_KEY);
+
            return view('main-site.payment-success',compact('order'));
         }else{
             if ($this->provider === 'stripe') {

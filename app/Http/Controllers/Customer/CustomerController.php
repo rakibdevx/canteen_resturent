@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\CreateUserRequest;
+use App\Mail\NewAccountNotification;
 use App\Http\Controllers\Traits\CartTrait;
 use App\Http\Requests\UpdateProfileRequest;
 use App\Http\Controllers\Traits\OrderNumberGeneratorTrait;
@@ -72,9 +73,7 @@ class CustomerController extends Controller
     }
 
 
-
-
-        public function editAccount()
+    public function editAccount()
     {
         $user = Auth::User();
         return view('customer.edit-account', compact('user'));
@@ -139,9 +138,9 @@ class CustomerController extends Controller
         $user->save();
 
         // Send password changed notification email
-        Mail::to($user->email)->send(new PasswordChangedNotification($user));
+        Mail::to($user->email)->queue(new PasswordChangedNotification($user));
 
-        return redirect()->route('admin.dashboard')->with('success', 'Your password has been successfully updated.');
+        return redirect()->route('rider.account')->with('success', 'Your password has been successfully updated.');
     }
 
 
@@ -174,17 +173,17 @@ class CustomerController extends Controller
 
         if ($user) {
 
-            // try {
-            //     // Send email welcome message
-            //     Mail::to($user->email)->send(new NewAccountNotification($user, $user->email));
-            //     $message = ['success' => 'User created successfully. Login details sent to user email.'];
-            // } catch (TransportExceptionInterface $e) {
+            try {
+                // Send email welcome message
+                Mail::to($user->email)->queue(new NewAccountNotification($user, $user->email));
+                $message = ['success' => 'User created successfully. Login details sent to user email.'];
+            } catch (TransportExceptionInterface $e) {
 
-            //     $message = [
-            //         'success' => 'User created successfully.',
-            //         'error' => 'Failed to send email: ' . $e->getMessage()
-            //     ];
-            // }
+                $message = [
+                    'success' => 'User created successfully.',
+                    'error' => 'Failed to send email: ' . $e->getMessage()
+                ];
+            }
 
             $message = ['success' => 'Account created successfully. You can now log in.'];
             auth()->login($user);

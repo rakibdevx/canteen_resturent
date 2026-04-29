@@ -88,7 +88,7 @@
 @endpush
 
 
-@section('title', 'Change Password')
+@section('title', 'Edit Account')
 
 
 @section('header')
@@ -101,20 +101,19 @@
     <!-- END HEADER -->
 @endsection
  
- 
 
 @section('content')
 
-<!-- START: Change Password -->
+<!-- START: Edit My Profile -->
 <style>
+    /* Minimal styles only for the header card; no input styling */
     .acct {
         --radius: 16px;
         --shadow: 0 12px 30px rgba(0,0,0,.08);
         --muted: #6c757d;
     }
     .acct-card {
-        border: 0; border-radius: var(--radius); box-shadow: var(--shadow);
-        overflow: hidden; background: #fff;
+        border: 0; border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; background: #fff;
     }
     .acct-hero {
         background: linear-gradient(135deg, rgba(13,110,253,.18), rgba(111,66,193,.14));
@@ -126,23 +125,6 @@
     }
     .acct-name { font-weight: 800; font-size: 1.25rem; line-height: 1.1; }
     .acct-sub { color: var(--muted); }
-
-    /* Password toggle styling */
-    .password-wrapper {
-        position: relative;
-    }
-    .password-wrapper .toggle-password {
-        position: absolute;
-        top: 50%;
-        right: 12px;
-        transform: translateY(-50%);
-        cursor: pointer;
-        color: #888;
-    }
-    .password-wrapper .toggle-password:hover {
-        color: #000;
-    }
-
     .g-gap { gap: 1.25rem; }
 </style>
 
@@ -177,63 +159,54 @@
 
             <!-- FORM BODY -->
             <div class="p-3 p-md-4">
-                <form method="POST" action="{{ route('customer.change.password.post') }}">
+                <form method="POST" action="{{ route('rider.update.profile') }}" enctype="multipart/form-data">
                     @csrf
+                    @method('PUT')
 
                     <div class="row g-3">
-                        <!-- Current Password -->
-                        <div class="col-md-12 mb-3">
-                            <label for="current_password" class="form-label">Current Password</label>
-                            <div class="password-wrapper">
-                                <input id="current_password" name="current_password" type="password" class="form-control" required>
-                                <i class="fas fa-eye toggle-password" data-target="#current_password"></i>
-                            </div>
-                  
+                        <div class="col-md-6">
+                            <label for="first_name" class="form-label">First Name</label>
+                            <input id="first_name" name="first_name" type="text" class="form-control" value="{{ old('first_name', $user->first_name) }}" required>
                         </div>
 
-                        <!-- New Password -->
                         <div class="col-md-6">
-                            <label for="new_password" class="form-label">New Password</label>
-                            <div class="password-wrapper">
-                                <input id="new_password" name="new_password" type="password" class="form-control" required minlength="8">
-                                <i class="fas fa-eye toggle-password" data-target="#new_password"></i>
-                            </div>
-        
+                            <label for="last_name" class="form-label">Last Name</label>
+                            <input id="last_name" name="last_name" type="text" class="form-control" value="{{ old('last_name', $user->last_name) }}" required>
                         </div>
 
-                        <!-- Confirm New Password -->
                         <div class="col-md-6">
-                            <label for="new_password_confirmation" class="form-label">Confirm New Password</label>
-                            <div class="password-wrapper">
-                                <input id="new_password_confirmation" name="new_password_confirmation" type="password" class="form-control" required>
-                                <i class="fas fa-eye toggle-password" data-target="#new_password_confirmation"></i>
-                            </div>
+                            <label for="middle_name" class="form-label">Middle Name</label>
+                            <input id="middle_name" name="middle_name" type="text" class="form-control" value="{{ old('middle_name', $user->middle_name) }}">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="email" class="form-label">Email Address</label>
+                            <input id="email" name="email" type="email" class="form-control" value="{{ old('email', $user->email) }}" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="phone_number" class="form-label">Phone Number</label>
+                            <input id="phone_number" name="phone_number" type="text" class="form-control" value="{{ old('phone_number', $user->phone_number) }}">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="address" class="form-label">Address</label>
+                            <input id="address" name="address" type="text" class="form-control" value="{{ old('address', $user->address) }}">
                         </div>
                     </div>
 
                     <div class="d-flex justify-content-between flex-wrap mt-4">
-                        <button type="submit" class="btn btn-danger">Update Password</button>
-                        <a href="{{ route('customer.account') }}" class="btn btn-light">Cancel</a>
+                        <button type="submit" class="btn btn-danger">Save Changes</button>
+                        <a href="{{ route('rider.account') }}" class="btn btn-light">Cancel</a>
                     </div>
                 </form>
             </div>
+
+
+            
         </div><!-- /acct-card -->
     </div>
 </div>
-<!-- END: Change Password -->
-
-<!-- Password toggle script -->
-<script>
-$(document).ready(function() {
-    $('.toggle-password').on('click', function() {
-        let input = $($(this).data('target'));
-        let type = input.attr('type') === 'password' ? 'text' : 'password';
-        input.attr('type', type);
-
-        // Toggle icon between fa-eye and fa-eye-slash
-        $(this).toggleClass('fa-eye fa-eye-slash');
-    });
-});
-</script>
+<!-- END: Edit My Profile -->
 
 @endsection

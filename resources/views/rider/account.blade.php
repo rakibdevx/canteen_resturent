@@ -88,7 +88,7 @@
 @endpush
 
 
-@section('title', 'Change Password')
+@section('title', 'Create Account')
 
 
 @section('header')
@@ -100,21 +100,24 @@
     </header>
     <!-- END HEADER -->
 @endsection
- 
- 
+
 
 @section('content')
 
-<!-- START: Change Password -->
+ 
+
+ <!-- START: Rider Account -->
 <style>
     .acct {
         --radius: 16px;
         --shadow: 0 12px 30px rgba(0,0,0,.08);
         --muted: #6c757d;
+        --border: #eef0f3;
+        --soft: #f8f9fb;
+        --accent: #0d6efd;
     }
     .acct-card {
-        border: 0; border-radius: var(--radius); box-shadow: var(--shadow);
-        overflow: hidden; background: #fff;
+        border: 0; border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; background: #fff;
     }
     .acct-hero {
         background: linear-gradient(135deg, rgba(13,110,253,.18), rgba(111,66,193,.14));
@@ -127,21 +130,30 @@
     .acct-name { font-weight: 800; font-size: 1.25rem; line-height: 1.1; }
     .acct-sub { color: var(--muted); }
 
-    /* Password toggle styling */
-    .password-wrapper {
-        position: relative;
+    .acct-hd { font-weight: 800; font-size: 1.05rem; margin-bottom: .75rem; }
+
+    .info-tiles {
+        display: grid; gap: 12px;
+        grid-template-columns: 1fr;
     }
-    .password-wrapper .toggle-password {
-        position: absolute;
-        top: 50%;
-        right: 12px;
-        transform: translateY(-50%);
-        cursor: pointer;
-        color: #888;
+    @media (min-width: 768px) {
+        .info-tiles { grid-template-columns: 1fr 1fr; }
     }
-    .password-wrapper .toggle-password:hover {
-        color: #000;
+    .tile {
+        border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; background: #fff;
     }
+    .tile .label {
+        font-size: .74rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: .25rem;
+    }
+    .tile .value {
+        font-weight: 700; display: inline-flex; align-items: center; gap: .5rem;
+    }
+
+    .acct-ql .btn {
+        border-radius: 999px; padding: .45rem .9rem; font-weight: 600;
+        border: 1px solid var(--border); background: #fff;
+    }
+    .acct-ql .btn:hover { background: var(--soft); }
 
     .g-gap { gap: 1.25rem; }
 </style>
@@ -149,6 +161,7 @@
 <div class="section acct">
     <div class="container">
         @include('partials.message-bag')
+ 
 
         <div class="acct-card">
             <!-- HERO: avatar + name only -->
@@ -161,6 +174,7 @@
                             src="https://ui-avatars.com/api/?name={{ urlencode(trim(($user->first_name ?? '') . ' ' . ($user->last_name ?? ''))) }}&size=192&background=E9ECEF&color=495057"
                             alt="User avatar"
                         />
+
                         <div>
                             <div class="acct-name">
                                 {{ trim(($user->first_name ?? '') . ' ' . ($user->last_name ?? '')) ?: 'Your name' }}
@@ -168,72 +182,60 @@
                             <div class="acct-sub">
                                 {{ $user->email ?? 'no-email@domain.com' }}
                                 <span class="mx-2">•</span>
-                                <span>Member since {{ optional($user->created_at)->format('d M Y') ?? '—' }}</span>
+                                <span>
+                                    Member since {{ optional($user->created_at)->format('d M Y') ?? '—' }}
+                                </span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- FORM BODY -->
+
+            <!-- BODY: Account Details -->
             <div class="p-3 p-md-4">
-                <form method="POST" action="{{ route('customer.change.password.post') }}">
-                    @csrf
+                <div class="acct-hd">Account Details</div>
 
-                    <div class="row g-3">
-                        <!-- Current Password -->
-                        <div class="col-md-12 mb-3">
-                            <label for="current_password" class="form-label">Current Password</label>
-                            <div class="password-wrapper">
-                                <input id="current_password" name="current_password" type="password" class="form-control" required>
-                                <i class="fas fa-eye toggle-password" data-target="#current_password"></i>
-                            </div>
-                  
-                        </div>
-
-                        <!-- New Password -->
-                        <div class="col-md-6">
-                            <label for="new_password" class="form-label">New Password</label>
-                            <div class="password-wrapper">
-                                <input id="new_password" name="new_password" type="password" class="form-control" required minlength="8">
-                                <i class="fas fa-eye toggle-password" data-target="#new_password"></i>
-                            </div>
-        
-                        </div>
-
-                        <!-- Confirm New Password -->
-                        <div class="col-md-6">
-                            <label for="new_password_confirmation" class="form-label">Confirm New Password</label>
-                            <div class="password-wrapper">
-                                <input id="new_password_confirmation" name="new_password_confirmation" type="password" class="form-control" required>
-                                <i class="fas fa-eye toggle-password" data-target="#new_password_confirmation"></i>
-                            </div>
-                        </div>
+                <div class="info-tiles">
+                    <div class="tile">
+                        <div class="label">First name</div>
+                        <div class="value">{{ $user->first_name ?? '—' }}</div>
                     </div>
-
-                    <div class="d-flex justify-content-between flex-wrap mt-4">
-                        <button type="submit" class="btn btn-danger">Update Password</button>
-                        <a href="{{ route('customer.account') }}" class="btn btn-light">Cancel</a>
+                    <div class="tile">
+                        <div class="label">Last name</div>
+                        <div class="value">{{ $user->last_name ?? '—' }}</div>
                     </div>
-                </form>
+                    <div class="tile">
+                        <div class="label">Middle name</div>
+                        <div class="value">{{ $user->middle_name ?? '—' }}</div>
+                    </div>
+                    <div class="tile">
+                        <div class="label">Email</div>
+                        <div class="value"><i class="far fa-envelope me-1"></i>{{ $user->email ?? '—' }}</div>
+                    </div>
+                    <div class="tile"  style="grid-column: 1 / -1;">
+                        <div class="label">Phone</div>
+                        <div class="value"><i class="fas fa-phone me-1"></i>{{ $user->phone_number ?? '—' }}</div>
+                    </div>
+                    <div class="tile" style="grid-column: 1 / -1;">
+                        <div class="label">Default address</div>
+                        <div class="value"><i class="fas fa-map-marker-alt me-1"></i>{{ $user->address ?? '—' }}</div>
+                    </div>
+                </div>
+
+                <!-- Bottom action buttons -->
+                <div class="acct-ql d-flex flex-wrap gap-2 mt-4">
+                    <a href="{{ route('rider.edit.profile') }}" class="btn btn-sm"><i class="fas fa-user-edit me-2"></i>Edit Account</a>
+                    <a href="{{ route('rider.change.password') }}" class="btn btn-sm"><i class="fas fa-key me-2"></i>Change Password</a>
+                    <a href="{{ route('home') }}" class="btn btn-sm"><i class="fas fa-shopping-bag me-2"></i>Return to Shopping</a>
+                    <a href="{{ route('rider.orders') }}" class="btn btn-sm"><i class="fas fa-file-invoice-dollar me-2"></i>My Orders</a>
+                    <a href="{{ route('auth.logout') }}" class="btn btn-sm"><i class="fas fa-sign-out-alt me-2"></i>Logout</a>
+                </div>
             </div>
-        </div><!-- /acct-card -->
+        </div>
     </div>
 </div>
-<!-- END: Change Password -->
+<!-- END: rider Account -->
 
-<!-- Password toggle script -->
-<script>
-$(document).ready(function() {
-    $('.toggle-password').on('click', function() {
-        let input = $($(this).data('target'));
-        let type = input.attr('type') === 'password' ? 'text' : 'password';
-        input.attr('type', type);
-
-        // Toggle icon between fa-eye and fa-eye-slash
-        $(this).toggleClass('fa-eye fa-eye-slash');
-    });
-});
-</script>
 
 @endsection

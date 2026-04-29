@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+use Illuminate\Http\Request;
 
 use App\Models\User;
 use App\Http\Controllers\Controller;
@@ -33,8 +34,15 @@ class UserAdminController extends Controller
     }
 
     // Store a new admin
-    public function store(CreateUserRequest $request)
+    public function store(Request $request)
     {
+        $request->validate([
+            'first_name' => 'required|string|max:255',   
+            'middle_name' => 'nullable|string|max:255', 
+            'last_name' => 'required|string|max:255',    
+            'email' => 'required|email|unique:users,email',  
+            'role' => 'required|in:admin,global_admin,customer,rider',
+        ]);
         $user = User::create([
             'first_name' => $request->first_name,
             'middle_name' => $request->middle_name,
@@ -42,12 +50,12 @@ class UserAdminController extends Controller
             'email' => $request->email,
             'role' => $request->role,
             'password' => Hash::make($request->email),
-            'notice' => 'change_password_to_activate_account',
+            'notice' => 'Use Your email as password for first login and also change your password as soon as possiable',
         ]);
     
         try {
             // Send email notification 
-            Mail::to($user->email)->send(new NewAccountNotification($user, $user->email));
+            Mail::to($user->email)->queue(new NewAccountNotification($user, $user->email));
             $message = ['success' => 'User created successfully. Login details sent to user email.'];
         } catch (TransportExceptionInterface $e) {
   

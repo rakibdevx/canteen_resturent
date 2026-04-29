@@ -76,9 +76,19 @@
             <div class="card-header d-flex justify-content-between align-items-center">
                 <span>Order Details - #{{ $order->order_no }} </span>
                 <span>
+                    @if ($order->rider_id)
+                    <strong>Rider :</strong> {{ 
+                        implode(' ', array_filter([
+                            $order->rider->first_name,
+                            $order->rider->middle_name,
+                            $order->rider->last_name
+                        ])) 
+                    }}
+                    @else
                     <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#assinModal">
                         Assign A Rider
                     </button>
+                    @endif
 
                     @if (
                         $order->payment_method == 'Cash On Delivery' ||
@@ -149,7 +159,7 @@
                                 <td>
                                     @switch($order->status)
                                         @case('pending')
-                                            <span class="badge badge-danger"><i class="fa fa-exclamation-circle"></i> {{ ucfirst($order->status) }}</span>
+                                            <span class="badge badge-danger"><i class="fa fa-exclamation-circle"></i> {{ ucfirst($order->status) }}</span> <span class="badge badge-info">{{ $order->rider_id ? 'Rider Assigned' : 'Not Assigned' }}</span>
                                             @break
                                         @case('completed')
                                             <span class="badge badge-success"><i class="fa fa-check"></i> {{ ucfirst($order->status) }}</span>

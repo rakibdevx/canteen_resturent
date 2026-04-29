@@ -116,17 +116,23 @@
         <!-- Credentials -->
         <table>
             <tr>
-                <th>Email</th>
-                <td>{{ $user->email }}</td>
+                <th>Name</th>
+                <td>{{ $user->first_name }}</td>
             </tr>
             <tr>
-                <th>Password</th>
-                <td>{{ $password }}</td>
+                <th>Email</th>
+                <td>{{ $email }}</td>
             </tr>
             <tr>
                 <th>Login Link</th>
                 <td><a href="{{ route('auth.login') }}">{{ route('auth.login') }}</a></td>
             </tr>
+            @if ($user->notice != null)
+                <tr>
+                    <th>Notice</th>
+                    <th>{!! $user->notice !!}</th>
+                </tr>
+            @endif
         </table>
 
         <p><strong>Important:</strong> A confirmation code will be sent to you when you try to log in for the first time. Use this one-time password to change your password and gain access to the admin panel.</p>

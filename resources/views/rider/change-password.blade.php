@@ -177,7 +177,7 @@
 
             <!-- FORM BODY -->
             <div class="p-3 p-md-4">
-                <form method="POST" action="{{ route('customer.change.password.post') }}">
+                <form method="POST" action="{{ route('rider.change.password.post') }}">
                     @csrf
 
                     <div class="row g-3">
@@ -213,7 +213,7 @@
 
                     <div class="d-flex justify-content-between flex-wrap mt-4">
                         <button type="submit" class="btn btn-danger">Update Password</button>
-                        <a href="{{ route('customer.account') }}" class="btn btn-light">Cancel</a>
+                        <a href="{{ route('rider.account') }}" class="btn btn-light">Cancel</a>
                     </div>
                 </form>
             </div>

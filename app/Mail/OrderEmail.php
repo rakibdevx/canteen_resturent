@@ -17,11 +17,10 @@ class OrderEmail extends Mailable
     public $deliveryFee;
     public $totalPrice;
     public $companyEmail;
-    public $companyPhone;
     public $site_settings;
 
  
-    public function __construct($orderItems, $customerName, $customerEmail, $orderNo, $deliveryFee, $totalPrice, $companyEmail, $companyPhone)
+    public function __construct($orderItems, $customerName, $customerEmail, $orderNo, $deliveryFee, $totalPrice, $companyEmail)
     {
         $this->site_settings  =   SiteSetting::latest()->first();
 
@@ -32,7 +31,6 @@ class OrderEmail extends Mailable
         $this->deliveryFee = $deliveryFee;
         $this->totalPrice = $totalPrice;
         $this->companyEmail = $companyEmail;
-        $this->companyPhone = $companyPhone;
     }
 
    
@@ -48,7 +46,6 @@ class OrderEmail extends Mailable
                         'deliveryFee' => $this->deliveryFee,
                         'totalPrice' => $this->totalPrice,
                         'companyEmail' => $this->companyEmail,
-                        'companyPhone' => $this->companyPhone,
                         'site_settings' => $this->site_settings,
                     ]);
     }

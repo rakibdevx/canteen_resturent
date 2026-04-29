@@ -11,23 +11,14 @@ class CompanyAddressSeeder extends Seeder
     {
         $addresses = [
             [
-                'street'       => 'House 12, Road 5, Dhanmondi',
-                'city'         => 'Dhaka',
-                'state'        => 'Dhaka',
-                'postal_code'  => '1205',
-                'country'      => 'Bangladesh',
-                'latitude'     => 23.746466,
-                'longitude'    => 90.376015,
-            ],
-            [
-                'street'       => 'House 45, Road 10, Uttara Sector 7',
+                'street'       => '11/2 Kawlar Jame Mosjid Road, Ashkona,(Near Hajj Camp) Dakshinkhan',
                 'city'         => 'Dhaka',
                 'state'        => 'Dhaka',
                 'postal_code'  => '1230',
                 'country'      => 'Bangladesh',
-                'latitude'     => 23.875900,
-                'longitude'    => 90.379500,
-            ]
+                'latitude'     => 23.746466,
+                'longitude'    => 90.376015,
+            ],
         ];
         foreach ($addresses as $address) {
             CompanyAddress::updateOrCreate(
