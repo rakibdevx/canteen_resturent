@@ -27,6 +27,7 @@ use App\Http\Controllers\Admin\GeneralSettingsController;
 use App\Http\Controllers\Admin\TermsAndConditionController;
 use App\Http\Controllers\Admin\TableBookingController as AdminTableBookingController;
 use App\Http\Controllers\Rider\RiderController;
+use Illuminate\Support\Facades\Artisan;
 
 Route::get('/', [MainSiteController::class, 'home'])->name('home');
 
@@ -291,4 +292,20 @@ Route::prefix('rider')->middleware(CheckRoleRider::class)->group(function () {
 
     Route::get('/otp/{id}', [RiderController::class, 'otp'])->name('rider.otp');
     Route::post('/confirm', [RiderController::class, 'order_confirm'])->name('rider.order_confirm');
+});
+
+
+
+Route::get('/cc', function () {
+
+    Artisan::call('cache:clear');
+    Artisan::call('config:clear');
+    Artisan::call('route:clear');
+    Artisan::call('view:clear');
+    Artisan::call('clear-compiled');
+    Artisan::call('optimize:clear');
+    return response()->json([
+        'success' => true,
+        'message' => 'All system caches cleared successfully'
+    ]);
 });
