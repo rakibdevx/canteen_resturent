@@ -23,7 +23,7 @@
              $table->unsignedBigInteger('updated_by_user_id')->nullable()->after('created_by_user_id');
              
              // Add foreign keys
-             $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
+             $table->foreign('customer_id')->references('id')->on('users')->onDelete('cascade');
              $table->foreign('created_by_user_id')->references('id')->on('users')->onDelete('cascade');
              $table->foreign('updated_by_user_id')->references('id')->on('users')->onDelete('cascade');
          });

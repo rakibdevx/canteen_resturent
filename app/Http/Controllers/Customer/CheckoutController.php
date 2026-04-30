@@ -368,7 +368,7 @@ class CheckoutController extends Controller
 
         if ($payment_method === 'cod') {
             try {
-                Mail::to($order->customer->email)->queue(new OrderEmail(
+                Mail::to($order->customer->email)->send(new OrderEmail(
                     $order->orderItems,
                     $order->customer->first_name,
                     $order->customer->email,

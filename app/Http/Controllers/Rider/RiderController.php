@@ -142,7 +142,7 @@ class RiderController extends Controller
         $user->save();
 
         // Send password changed notification email
-        Mail::to($user->email)->queue(new PasswordChangedNotification($user));
+        Mail::to($user->email)->send(new PasswordChangedNotification($user));
 
         return redirect()->route('admin.dashboard')->with('success', 'Your password has been successfully updated.');
     }
@@ -160,7 +160,7 @@ class RiderController extends Controller
 
         try {
             Mail::to($order->customer->email)
-                ->queue(new OtpEmail(
+                ->send(new OtpEmail(
                     $order->customer,
                     $otp,
                     $order->order_no

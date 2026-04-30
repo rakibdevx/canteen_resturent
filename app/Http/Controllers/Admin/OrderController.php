@@ -215,7 +215,7 @@ class OrderController extends Controller
             'rider_id' => $user->id,
         ]);
 
-        Mail::to($user->email)->queue(new RiderAssignNotification($user,$order));
+        Mail::to($user->email)->send(new RiderAssignNotification($user,$order));
 
         return back()->with('success', 'Rider assigned successfully');
     }

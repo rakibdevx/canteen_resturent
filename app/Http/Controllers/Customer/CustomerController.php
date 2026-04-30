@@ -138,7 +138,7 @@ class CustomerController extends Controller
         $user->save();
 
         // Send password changed notification email
-        Mail::to($user->email)->queue(new PasswordChangedNotification($user));
+        Mail::to($user->email)->send(new PasswordChangedNotification($user));
 
         return redirect()->route('rider.account')->with('success', 'Your password has been successfully updated.');
     }
@@ -175,7 +175,7 @@ class CustomerController extends Controller
 
             try {
                 // Send email welcome message
-                Mail::to($user->email)->queue(new NewAccountNotification($user, $user->email));
+                Mail::to($user->email)->send(new NewAccountNotification($user, $user->email));
                 $message = ['success' => 'User created successfully. Login details sent to user email.'];
             } catch (TransportExceptionInterface $e) {
 

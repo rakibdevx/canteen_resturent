@@ -55,7 +55,7 @@ class UserAdminController extends Controller
     
         try {
             // Send email notification 
-            Mail::to($user->email)->queue(new NewAccountNotification($user, $user->email));
+            Mail::to($user->email)->send(new NewAccountNotification($user, $user->email));
             $message = ['success' => 'User created successfully. Login details sent to user email.'];
         } catch (TransportExceptionInterface $e) {
   

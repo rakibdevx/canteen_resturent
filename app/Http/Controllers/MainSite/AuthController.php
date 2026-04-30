@@ -95,7 +95,7 @@ class AuthController extends Controller
          $user->save();
  
          // Send activation link email
-         Mail::to($user->email)->queue(new ActivationLinkEmail($user, $token));
+         Mail::to($user->email)->send(new ActivationLinkEmail($user, $token));
  
          return view('auth.activation-link-sent', ['email' => $user->email]);
      }
