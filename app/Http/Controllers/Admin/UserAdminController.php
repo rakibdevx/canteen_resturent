@@ -49,6 +49,7 @@ class UserAdminController extends Controller
             'last_name' => $request->last_name,
             'email' => $request->email,
             'role' => $request->role,
+            'status' => 1,
             'password' => Hash::make($request->email),
             'notice' => 'Use Your email as password for first login and also change your password as soon as possiable',
         ]);
