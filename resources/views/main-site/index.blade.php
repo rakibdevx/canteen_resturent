@@ -215,8 +215,8 @@
             <div class="row justify-content-center">
                 <div class="col-xl-6 col-lg-8">
                     <div class="heading_s1 animation text-center" data-animation="fadeInUp" data-animation-delay="0.02s">
-                        <div class="sub_heading font_style1">Special Food test  output</div>
-                        <h2>from Our Menu</h2>
+                        <div class="sub_heading font_style1">Special Food</div>
+                        <h2>from Our Menu  test  output</h2>
                     </div>
                     <div class="small_divider clearfix"></div>
                 </div>
