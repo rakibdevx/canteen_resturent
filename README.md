@@ -1,59 +1,137 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Laravel Canteen/Restaurant Project
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Table of Contents
 
-## About Laravel
+1. # Prerequisites
+2. # Setup Instructions
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+    # Clone the Git Repository
+    # Install Composer Dependencies
+    # Create Database
+    # Environment Setup
+    # Run Migrations and Seeders
+    # Start the Development Server
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Prerequisites
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Before you begin, ensure you have the following installed on your system:
 
-## Learning Laravel
+1. **PHP** (minimum version 8.2)
+2. **Composer** (Dependency Manager for PHP)
+3. **MySQL** (or any other database supported by Laravel)
+4. **XAMPP/WAMP/LAMP** (for running a local server)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Setup Instructions
 
-## Laravel Sponsors
+Follow the steps below to set up the project on your local machine.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 1. Clone the Git Repository
 
-### Premium Partners
+First, clone the project repository to your local machine.
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+------bash-------
+git clone https://github.com/rakibdevx/canteen_resturent.git
 
-## Contributing
+### 2. Install Composer Dependencies
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Next, navigate to the project directory and install the required PHP packages using Composer.
 
-## Code of Conduct
+------bash-------
+cd canteen_resturent
+composer install
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
 
-## Security Vulnerabilities
+### 3. Create Database
+Step-by-Step Guide to Create a Database via phpMyAdmin:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+    Start XAMPP or WAMP:
 
-## License
+        launch the local web server and database server on your machine.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+        Open phpMyAdmin:
+            Once the services are running, open your browser and go to http://localhost/phpmyadmin
+            .This will open the phpMyAdmin interface.
+
+            Login to phpMyAdmin:
+                By default, you may not need a username or password if it's set to default. However, if you have set a password for MySQL, use the credentials to log in.
+
+            Create a New Database:
+                On the phpMyAdmin home page, look at the left sidebar and click on Databases.
+
+                In the "Create database" section, you'll see a field for entering the database name.
+
+                Enter a name for your database (e.g., canteen_restaurant). Make sure the name follows the naming conventions (no spaces, no special characters except underscores).
+
+                Under the Collation dropdown, leave the default option (utf8_general_ci) unless you have specific reasons to choose a different one.
+
+            Click on the Create button.
+
+        Verify Database Creation:
+            After clicking the Create button, your new database should now appear in the list on the left sidebar.
+
+Make sure to replace `canteen_restaurant` with any name you prefer.
+
+### 4. Environment Setup
+
+Next, copy the `.env.example` file to create your `.env` file:
+
+------bash-------
+cp .env.example .env
+
+Edit the `.env` file with your database credentials.
+
+------env-------
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=canteen_restaurant   # (Use the database name you created above)
+DB_USERNAME=root                 # (Your MySQL username)
+DB_PASSWORD=yourpassword('if not change your password leave it blank)
+------env-------
+
+Make sure that the environment variables match your local setup.
+
+### 5. Run Migrations and Seeders
+
+Now, you need to run the database migrations and seeders to set up your tables and initial data.
+
+Run the migrations:
+
+```bash
+php artisan migrate
+
+
+Optionally, you can also run the seeders if you want to populate the database with sample data:
+
+------bash-------
+php artisan db:seed
+------bash-------
+
+### 6. Start the Development Server
+
+Finally, you can start the Laravel development server:
+
+------env-------
+php artisan serve
+------env-------
+
+By default, it will run on `http://localhost:8000`.
+
+---
+
+## Additional Information
+
+* If you want to run the project on a custom server (like XAMPP/WAMP), make sure to move the project folder inside the `htdocs` directory (for XAMPP) or equivalent.
+
+* You can also use `php artisan serve` to run the application using Laravel's built-in server, but this is typically for development purposes.
+
+---
+
+Feel free to ask if you have any questions or face any issues while setting up the project!
+
+Contact : rakib042002@gmail.com
+
+---
