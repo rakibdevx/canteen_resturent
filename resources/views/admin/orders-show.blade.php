@@ -146,6 +146,8 @@
                                 <td>{{ $order->payment_method }}
                                     @if(is_null($order->status_online_pay) || $order->status_online_pay === 'unpaid')
                                         <span class="badge badge-danger"><i class="fa fa-exclamation-circle"></i> unpaid</span>
+                                    @else
+                                        <span class="badge badge-success"><i class="fa fa-check-circle"></i> Paid</span>
                                     @endif
                                 </td>
                             </tr>

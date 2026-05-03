@@ -291,7 +291,7 @@ class CheckoutController extends Controller
             $method = "Cash On Delivery";
         }else
         {
-            $method = $payment_method;
+            $method = "Stripe";
         }
 
         $price_per_floor = $this->price_per_floor;
