@@ -88,7 +88,7 @@
                                     ]))
                                 }}
                             @else
-                                <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#assignModal">
+                                <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#assinModal">
                                     Assign A Rider
                                 </button>
                             @endif
@@ -468,17 +468,6 @@
                 </div>
             </div>
         </div>
-
-
-
-
-
-
-
-
-
-
-
     </div>
     <!-- content-wrapper ends -->
     @include('partials.admin.footer')
