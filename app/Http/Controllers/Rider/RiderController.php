@@ -183,8 +183,11 @@ class RiderController extends Controller
     public function order_confirm(Request $request)
     {
         $order = Order::findOrFail($request->order_id);
+        if($order->status == "cancelled")
+        {
+             return back()->with('danger', 'Order Already Cancelled');
+        }
 
-        // ❗ expire check
         if (now()->gt($order->otp_expire)) {
             return response()->json([
                 'message' => 'OTP expired'
@@ -210,4 +213,12 @@ class RiderController extends Controller
         ], 400);
     }
 
+    public function cancel($id)
+    {
+        $order = Order::findOrFail($id);
+        $order->update([
+            'status' => 'cancelled',
+        ]);
+         return back()->with('success', 'Order cancelled successfully');
+    }
 }

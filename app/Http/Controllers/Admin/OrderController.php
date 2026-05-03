@@ -180,18 +180,22 @@ class OrderController extends Controller
 
     public function update(Request $request, $id)
     {
-        // Validate the input data
         $request->validate([
-            'status' => 'required|in:completed,cancelled',
+            'status' => 'required|in:confirmed,preparing,ready,completed,cancelled'
         ]);
+
         $order = Order::findOrFail($id);
 
-        $order->update(
-            [
-                'status' => $request->status ,
-                'status_online_pay' => 'paid' ,
-                'updated_by_user_id' => Auth::id()
+        $order->update([
+            'status' => $request->status,
+            'updated_by_user_id' => Auth::id()
+        ]);
+
+        if ($request->status == "completed") {
+            $order->update([
+                'status_online_pay' => 'paid'
             ]);
+        }
 
         return back()->with('success', 'Order status updated successfully');
     }

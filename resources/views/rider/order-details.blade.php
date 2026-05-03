@@ -135,6 +135,10 @@
     <script src="/assets/js/mdtimepicker.min.js"></script>
     <!-- scripts js --> 
     <script src="/assets/js/scripts.js"></script>
+
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 @endpush
 
 @section('title', 'Order Details')
@@ -199,8 +203,14 @@
                                 <i class="fas fa-shopping-bag me-1"></i> Return to Shopping
                             </a>                            
                         </div>
-                        <div class="d-flex justify-content-end mt-3">
+                        <div class="d-flex justify-content-between mt-3">
                            @if ($order->status != "completed" && $order->status != "cancelled")
+                                <button 
+                                    type="button"
+                                    class="btn btn-sm btn-danger cancel-delivery-btn"
+                                    data-url="{{ route('rider.order.cancel', $order->id) }}">
+                                    <i class="fas fa-check me-1"></i> Mark As Cancel
+                                </button>                             
                                 <button 
                                     class="btn btn-sm btn-success confirm-delivery-btn"
                                     data-url="{{ route('rider.otp', $order->id) }}">
@@ -357,60 +367,80 @@
     <script>
         $(document).on('click', '.confirm-delivery-btn', function () {
 
-        let url = $(this).data('url');
+            let url = $(this).data('url');
 
-        $.ajax({
-            url: url, 
-            type: "GET",
-            success: function (res) {
-                $('#order_id').val(res.order_id);
-                $('#otpModal').modal('show');
-                $('#error_text').addClass('d-none');
-                $('#error_text').text();
-                $('#success_text').removeClass('d-none');
-                $('#success_text').text("Otp Sent Successfully");
-            },
-            error: function () {
-                $('#success_text').text('');
-                $('#success_text').addClass('d-none');
-                $('#error_text').removeClass('d-none');
-                 $('#error_text').text("Failed to send OTP");
-            }
+            $.ajax({
+                url: url, 
+                type: "GET",
+                success: function (res) {
+                    $('#order_id').val(res.order_id);
+                    $('#otpModal').modal('show');
+                    $('#error_text').addClass('d-none');
+                    $('#error_text').text();
+                    $('#success_text').removeClass('d-none');
+                    $('#success_text').text("Otp Sent Successfully");
+                },
+                error: function () {
+                    $('#success_text').text('');
+                    $('#success_text').addClass('d-none');
+                    $('#error_text').removeClass('d-none');
+                    $('#error_text').text("Failed to send OTP");
+                }
+            });
         });
-    });
 
 
     // verify OTP
-    $(document).on('click', '.verify-otp', function () {
+        $(document).on('click', '.verify-otp', function () {
 
-        let otp = $('#otp_input').val();
-        let orderId = $('#order_id').val();
+            let otp = $('#otp_input').val();
+            let orderId = $('#order_id').val();
 
-        $.ajax({
-            url: "{{ route('rider.order_confirm') }}",
-            type: "POST",
-            data: {
-                _token: "{{ csrf_token() }}",
-                otp: otp,
-                order_id: orderId
-            },
-            success: function (res) {
-                $('#error_text').addClass('d-none');
-                $('#error_text').text('');
-                $('#success_text').removeClass('d-none');
-                $('#success_text').text(res.message);
-                 setTimeout(function () {
-                    location.reload();
-                }, 2000);
-            },
-            error: function (xhr) {
-                $('#success_text').text('');
-                $('#success_text').addClass('d-none');
-                $('#error_text').removeClass('d-none');
-                $('#error_text').text(xhr.responseJSON?.message || 'Invalid OTP');
-            }
+            $.ajax({
+                url: "{{ route('rider.order_confirm') }}",
+                type: "POST",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    otp: otp,
+                    order_id: orderId
+                },
+                success: function (res) {
+                    $('#error_text').addClass('d-none');
+                    $('#error_text').text('');
+                    $('#success_text').removeClass('d-none');
+                    $('#success_text').text(res.message);
+                    setTimeout(function () {
+                        location.reload();
+                    }, 2000);
+                },
+                error: function (xhr) {
+                    $('#success_text').text('');
+                    $('#success_text').addClass('d-none');
+                    $('#error_text').removeClass('d-none');
+                    $('#error_text').text(xhr.responseJSON?.message || 'Invalid OTP');
+                }
+            });
+
         });
+        document.querySelectorAll(".cancel-delivery-btn").forEach(btn => {
+            btn.addEventListener("click", function () {
 
-    });
+                let url = this.dataset.url;
+
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "This order will be cancelled!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    confirmButtonText: "Yes, cancel it!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = url;
+                    }
+                });
+
+            });
+        });
     </script>
 @endpush

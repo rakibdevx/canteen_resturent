@@ -292,6 +292,7 @@ Route::prefix('rider')->middleware(CheckRoleRider::class)->group(function () {
 
     Route::get('/otp/{id}', [RiderController::class, 'otp'])->name('rider.otp');
     Route::post('/confirm', [RiderController::class, 'order_confirm'])->name('rider.order_confirm');
+    Route::get('/rider/order/cancel/{id}', [RiderController::class, 'cancel'])->name('rider.order.cancel');
 });
 
 

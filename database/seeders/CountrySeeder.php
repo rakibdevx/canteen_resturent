@@ -10,17 +10,18 @@ class CountrySeeder extends Seeder
     public function run(): void
         {
             $data = [
-                [
-                    'name'            => 'Bangladesh',
-                    'iso_code'        => 'BD',
-                    'currency_code'   => 'BDT',
-                    'currency_symbol' => '৳',
-                ],
+                
                 [
                     'name'            => 'United States',
                     'iso_code'        => 'US',
                     'currency_code'   => 'USD',
                     'currency_symbol' => '$',
+                ],
+                [
+                    'name'            => 'Bangladesh',
+                    'iso_code'        => 'BD',
+                    'currency_code'   => 'BDT',
+                    'currency_symbol' => '৳',
                 ]
             ];
 

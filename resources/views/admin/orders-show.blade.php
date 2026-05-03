@@ -76,30 +76,28 @@
             <div class="card-header d-flex justify-content-between align-items-center">
                 <span>Order Details - #{{ $order->order_no }} </span>
                 <span>
-                    @if ($order->rider_id)
-                    <strong>Rider :</strong> {{ 
-                        implode(' ', array_filter([
-                            $order->rider->first_name,
-                            $order->rider->middle_name,
-                            $order->rider->last_name
-                        ])) 
-                    }}
-                    @else
-                    <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#assinModal">
-                        Assign A Rider
-                    </button>
-                    @endif
-
-                    @if (
-                        $order->payment_method == 'Cash On Delivery' ||
-                        $order->status_online_pay == 'paid' ||
-                        is_null($order->status_online_pay)
-                    )
-                        @if ($order->status !== 'completed' && $order->status !== 'cancelled')
-                            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#updateModal">
-                                Update Order
-                            </button>
+                    @if (in_array($order->status, ['confirmed', 'preparing', 'ready']))
+                        @if ($order->order_type == "delivery")
+                            @if ($order->rider_id)
+                                <strong>Rider :</strong>
+                                {{
+                                    implode(' ', array_filter([
+                                        $order->rider->first_name,
+                                        $order->rider->middle_name,
+                                        $order->rider->last_name
+                                    ]))
+                                }}
+                            @else
+                                <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#assignModal">
+                                    Assign A Rider
+                                </button>
+                            @endif
                         @endif
+                    @endif
+                    @if ($order->status !== 'completed' && $order->status !== 'cancelled')
+                        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#updateModal">
+                            Update Order
+                        </button>
                     @endif
                 </span>
             </div>
@@ -146,8 +144,10 @@
                                 <td>{{ $order->payment_method }}
                                     @if(is_null($order->status_online_pay) || $order->status_online_pay === 'unpaid')
                                         <span class="badge badge-danger"><i class="fa fa-exclamation-circle"></i> unpaid</span>
-                                    @else
+                                    @elseif($order->status_online_pay === 'paid')
                                         <span class="badge badge-success"><i class="fa fa-check-circle"></i> Paid</span>
+                                    @else
+                                        <span class="badge badge-info"><i class="fa fa-check-circle"></i> {{$order->status_online_pay}}</span>
                                     @endif
                                 </td>
                             </tr>
@@ -166,10 +166,12 @@
                                         @case('completed')
                                             <span class="badge badge-success"><i class="fa fa-check"></i> {{ ucfirst($order->status) }}</span>
                                             @break
-                                        @default
+                                        @case('cancelled')
                                             <span class="badge badge-warning"><i class="fa fa-exclamation-circle"></i> {{ ucfirst($order->status) }}</span>
+                                            @break
+                                        @default
+                                            <span class="badge badge-info"><i class="fa fa-exclamation-circle"></i> {{ ucfirst($order->status) }}</span>
                                     @endswitch
-
                                 </td>
 
                             </tr>
@@ -416,9 +418,16 @@
                             @csrf
                             <div class="form-group">
                                 <label for="orderStatus">Order Status</label>
+                                @php
+                                    $statuses = ['pending', 'confirmed', 'preparing', 'ready', 'completed', 'cancelled'];
+                                @endphp
+
                                 <select class="form-control" id="orderStatus" name="status">
-                                    <option value="completed" {{ $order->status == 'completed' ? 'selected' : '' }}>Completed</option>
-                                    <option value="cancelled" {{ $order->status == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+                                    @foreach($statuses as $status)
+                                        <option value="{{ $status }}" {{ $order->status == $status ? 'selected' : '' }}>
+                                            {{ ucfirst($status) }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
                             <button type="submit" class="btn btn-primary">Update</button>
