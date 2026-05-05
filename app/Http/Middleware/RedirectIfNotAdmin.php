@@ -9,10 +9,10 @@ class RedirectIfNotAdmin
 {
     public function handle($request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->role == "admin") {
-            return $next($request);
+        if (!Auth::check()) {
+            return redirect()->route('auth.login')->withErrors(['error' => 'Access denied. You must log in to continue.']);
         }
 
-        return redirect()->route('auth.login')->with('error', 'You do not have permission to access this page.');
+        return $next($request);
     }
 }
