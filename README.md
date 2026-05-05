@@ -93,6 +93,7 @@ Make sure to replace `canteen_restaurant` with any name you prefer.
 Next, copy the `.env.example` file to create your `.env` file:
 
 bash <pre> cp .env.example .env  </pre>
+ <pre> php artisan key:generate  </pre>
 
 Edit the `.env` file with your database credentials.
 
