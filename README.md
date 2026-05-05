@@ -109,6 +109,24 @@ DB_PASSWORD=yourpassword         # leave blank if no password
 
 Make sure that the environment variables match your local setup.
 
+
+Edit the `.env` file with your Mail credentials.
+```env
+MAIL_MAILER=smtp
+MAIL_HOST=your_mail_host
+MAIL_PORT=465
+MAIL_USERNAME="your_mail_username"
+MAIL_PASSWORD="your_mail_password"
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS="your_from_address"
+MAIL_FROM_NAME="${APP_NAME}"
+```
+
+Edit the `.env` file with your Payment credentials.
+STRIPE_KEY=your_stripe_publishable_key
+STRIPE_SECRET=your_stripe_secret_key
+
+
 ### 5. Run Migrations and Seeders
 
 Now, you need to run the database migrations and seeders to set up your tables and initial data.
