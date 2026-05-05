@@ -1,9 +1,13 @@
 # Laravel Canteen/Restaurant Project
 
+## Project Overview
+This is a Laravel-based Canteen/Restaurant Management System that allows users to browse menus, place orders, and manage payments online.
+
 ## Table of Contents
 
-1. # Prerequisites
-2. # Setup Instructions
+1. [Prerequisites](#prerequisites)
+2. [Features](#features-list)
+3. [Setup Instructions](#setup-instructions)
 
     # Clone the Git Repository
     # Install Composer Dependencies
@@ -14,7 +18,6 @@
 ---
 
 ## Prerequisites
-## Additional Information
 
 Before you begin, ensure you have the following installed on your system:
 
@@ -23,7 +26,18 @@ Before you begin, ensure you have the following installed on your system:
 3. **MySQL** (or any other database supported by Laravel)
 4. **XAMPP/WAMP/LAMP** (for running a local server)
 
----
+
+# Features List
+    User authentication (login/register)
+    Food ordering system
+    Cart system
+    Payment integration (Stripe)
+    Admin dashboard
+    Order Tracking
+
+
+## Live Demo
+    https://www.res.ayanshop.com/
 
 ## Setup Instructions
 
@@ -34,14 +48,14 @@ Follow the steps below to set up the project on your local machine.
 First, clone the project repository to your local machine.
 
 ------bash-------
-git clone https://github.com/rakibdevx/canteen_resturent.git
+git clone https://github.com/rakibdevx/canteen_restaurant.git
 
 ### 2. Install Composer Dependencies
 
 Next, navigate to the project directory and install the required PHP packages using Composer.
 
 ------bash-------
-cd canteen_resturent
+cd canteen_restaurant
 composer install
 
 
