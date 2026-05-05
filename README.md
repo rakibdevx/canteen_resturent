@@ -47,7 +47,7 @@ Follow the steps below to set up the project on your local machine.
 
 First, clone the project repository to your local machine.
 
-<pre> ```bash git clone https://github.com/rakibdevx/your-repo.git ``` </pre>
+bash:<pre> git clone https://github.com/rakibdevx/canteen_restaurant.git </pre>
 
 ### 2. Install Composer Dependencies
 
