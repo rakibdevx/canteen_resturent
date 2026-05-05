@@ -123,9 +123,10 @@ MAIL_FROM_NAME="${APP_NAME}"
 ```
 
 Edit the `.env` file with your Payment credentials.
+```
 STRIPE_KEY=your_stripe_publishable_key
 STRIPE_SECRET=your_stripe_secret_key
-
+```
 
 ### 5. Run Migrations and Seeders
 
