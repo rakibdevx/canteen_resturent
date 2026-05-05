@@ -135,6 +135,24 @@ By default, it will run on `http://localhost:8000`.
 
 
 📌 Additional Information
+
+## Demo Access Credentials
+
+You can use the following demo accounts to test the system:
+
+### Admin Panel
+- Email: admin@example.com  
+- Password: password  
+
+### User Panel
+- Email: user@example.com  
+- Password: password  
+
+### Rider Panel
+- Email: rider@example.com  
+- Password: password  
+
+
 💳 Test Cards (Stripe Sandbox)
 
 You can use the following test cards for online payment testing:
