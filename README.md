@@ -47,8 +47,7 @@ Follow the steps below to set up the project on your local machine.
 
 First, clone the project repository to your local machine.
 
-------bash-------
-git clone https://github.com/rakibdevx/canteen_restaurant.git
+<pre> ```bash git clone https://github.com/rakibdevx/your-repo.git ``` </pre>
 
 ### 2. Install Composer Dependencies
 
@@ -135,7 +134,7 @@ php artisan serve
 
 By default, it will run on `http://localhost:8000`.
 
----
+
 
 📌 Additional Information
 💳 Test Cards (Stripe Sandbox)
