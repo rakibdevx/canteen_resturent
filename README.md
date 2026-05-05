@@ -95,19 +95,12 @@ bash <pre> cp .env.example .env  </pre>
 
 Edit the `.env` file with your database credentials.
 
-------env-------
 `DB_CONNECTION=mysql`
-
 `DB_HOST=127.0.0.1`
-
 `DB_PORT=3306`
-
 `DB_DATABASE=canteen_restaurant   # (Use the database name you created above)`
-
 `DB_USERNAME=root                 # (Your MySQL username)`
-
 `DB_PASSWORD=yourpassword('if not change your password leave it blank)`
-------env-------
 
 Make sure that the environment variables match your local setup.
 
@@ -129,7 +122,7 @@ bash <pre>php artisan db:seed</pre>
 
 Finally, you can start the Laravel development server:
 
-
+bash
 <pre>php artisan serve</pre>
 
 By default, it will run on `http://localhost:8000`.
