@@ -95,12 +95,14 @@ bash <pre> cp .env.example .env  </pre>
 
 Edit the `.env` file with your database credentials.
 
-`DB_CONNECTION=mysql`
-`DB_HOST=127.0.0.1`
-`DB_PORT=3306`
-`DB_DATABASE=canteen_restaurant   # (Use the database name you created above)`
-`DB_USERNAME=root                 # (Your MySQL username)`
-`DB_PASSWORD=yourpassword('if not change your password leave it blank)`
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=canteen_restaurant   # Use the database name you created above
+DB_USERNAME=root                 # Your MySQL username
+DB_PASSWORD=yourpassword         # leave blank if no password
+```
 
 Make sure that the environment variables match your local setup.
 
