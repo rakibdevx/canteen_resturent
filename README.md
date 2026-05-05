@@ -97,10 +97,15 @@ Edit the `.env` file with your database credentials.
 
 ------env-------
 `DB_CONNECTION=mysql`
+
 `DB_HOST=127.0.0.1`
+
 `DB_PORT=3306`
+
 `DB_DATABASE=canteen_restaurant   # (Use the database name you created above)`
+
 `DB_USERNAME=root                 # (Your MySQL username)`
+
 `DB_PASSWORD=yourpassword('if not change your password leave it blank)`
 ------env-------
 
@@ -113,7 +118,7 @@ Now, you need to run the database migrations and seeders to set up your tables a
 Run the migrations:
 
 bash
-php artisan migrate
+<pre>php artisan migrate</pre>
 
 
 Optionally, you can also run the seeders if you want to populate the database with sample data:
