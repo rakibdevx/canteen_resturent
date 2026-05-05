@@ -53,7 +53,7 @@ bash:<pre> git clone https://github.com/rakibdevx/canteen_restaurant.git </pre>
 
 Next, navigate to the project directory and install the required PHP packages using Composer.
 
-<pre> ```bash id="0yijzd" cd canteen_restaurant composer install ``` </pre>
+bash <pre> cd canteen_restaurant composer install  </pre>
 
 
 ### 3. Create Database
@@ -90,11 +90,18 @@ Make sure to replace `canteen_restaurant` with any name you prefer.
 
 Next, copy the `.env.example` file to create your `.env` file:
 
-<pre> ```bash id="6y7i0x" cp .env.example .env ``` </pre>
+bash <pre> cp .env.example .env  </pre>
 
 Edit the `.env` file with your database credentials.
 
-<pre> ```env id="v9q8x2" DB_CONNECTION=mysql DB_HOST=127.0.0.1 DB_PORT=3306 DB_DATABASE=canteen_restaurant # Use the database name you created above DB_USERNAME=root # Your MySQL username DB_PASSWORD=yourpassword # leave blank if no password ``` </pre>
+------env-------
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=canteen_restaurant   # (Use the database name you created above)
+DB_USERNAME=root                 # (Your MySQL username)
+DB_PASSWORD=yourpassword('if not change your password leave it blank)
+------env-------
 
 Make sure that the environment variables match your local setup.
 
@@ -104,19 +111,23 @@ Now, you need to run the database migrations and seeders to set up your tables a
 
 Run the migrations:
 
-```bash
+bash
 php artisan migrate
 
 
 Optionally, you can also run the seeders if you want to populate the database with sample data:
 
-<pre> ```bash id="x8k3p1" php artisan db:seed ``` </pre>
+------bash-------
+php artisan db:seed
+------bash-------
 
 ### 6. Start the Development Server
 
 Finally, you can start the Laravel development server:
 
-<pre> ```bash id="serve1" php artisan serve ``` </pre>
+------env-------
+php artisan serve
+------env-------
 
 By default, it will run on `http://localhost:8000`.
 
