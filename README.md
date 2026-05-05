@@ -9,12 +9,14 @@ This is a Laravel-based Canteen/Restaurant Management System that allows users t
 2. [Features](#features-list)
 3. [Setup Instructions](#setup-instructions)
 
+    ```
     Clone the Git Repository
     Install Composer Dependencies
     Create Database
     Environment Setup
     Run Migrations and Seeders
     Start the Development Server
+    ```
 
 ## Prerequisites
 
